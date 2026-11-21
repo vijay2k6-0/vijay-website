@@ -2,88 +2,22 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIJAY GAMING - Click Rush</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#07081a;color:#fff;text-align:center;min-height:100vh;padding:15px;
-background-image:radial-gradient(circle at 20% 20%, #ff00aa33, transparent 40%),radial-gradient(circle at 80% 80%, #00ffcc33, transparent 40%)}
-.top{font-size:13px;color:#00ffcc;letter-spacing:3px;margin-top:10px}
-h1{font-size:32px;margin:8px 0;text-shadow:0 0 20px #ff00aa}
-h1 span{color:#00ffcc;text-shadow:0 0 20px #00ffcc}
-.card{background:#131638;border:1px solid #00ffcc;border-radius:22px;max-width:420px;margin:15px auto;padding:20px;box-shadow:0 0 30px #00ffcc44}
-.scores{display:flex;justify-content:space-around;margin:10px 0}
-.scores div{background:#0a0c22;padding:10px 12px;border-radius:14px;flex:1;margin:0 4px}
-.scores small{color:#aaa} .scores b{font-size:24px;display:block}
-#bar{height:10px;background:#222;border-radius:10px;overflow:hidden;margin:10px 0}
-#fill{height:100%;width:100%;background:linear-gradient(90deg,#00ffcc,#ff00aa);transition:.3s}
-#gameArea{height:260px;background:#000;border:2px dashed #ff00aa;border-radius:18px;position:relative;overflow:hidden;margin:12px 0}
-#clickBtn{position:absolute;left:35%;top:40%;background:radial-gradient(circle,#fff700,#ff00aa);color:#000;font-size:19px;font-weight:900;padding:18px 22px;border:3px solid #fff;border-radius:50%;cursor:pointer;box-shadow:0 0 30px #ff00aa}
-#clickBtn:active{transform:scale(.9)}
-#startBtn{background:linear-gradient(45deg,#00ffcc,#0088ff);border:none;padding:13px 28px;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 0 18px #00ffcc}
-#result{margin-top:12px;font-weight:800;color:#ffeb00;min-height:22px}
-#plus{position:absolute;color:#00ffcc;font-weight:900;font-size:22px;pointer-events:none;animation:up .6s forwards}
-@keyframes up{to{transform:translateY(-40px);opacity:0}}
-</style>
+<title>Time pass Game</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="top">🔥 VIJAY GAMING • TIME PASS GAME 🔥</div>
-<h1>CLICK <span>RUSH</span></h1>
-<p style="color:#aaa;font-size:13px">10 Sec lo entha fast ga click chesthavo chuddam!</p>
-
-<div class="card">
-  <div class="scores">
-    <div><small>SCORE</small><b id="score" style="color:#ffeb00">0</b></div>
-    <div><small>TIME</small><b id="time" style="color:#ff00aa">10s</b></div>
-    <div><small>BEST</small><b id="best">0</b></div>
-  </div>
-
-  <div id="bar"><div id="fill"></div></div>
-
-  <div id="gameArea">
-    <button id="clickBtn" onclick="clickMe(event)">CLICK ME!</button>
-  </div>
-
-  <button id="startBtn" onclick="startGame()">▶ START GAME</button>
-  <div id="result"></div>
-  <p style="color:#888;font-size:12px;margin-top:8px">Button prathi click ki vere chota ki jump avuthundhi!</p>
+<h2>Time pass Game</h2>
+<div class="box">
+  <h1>Click the Button Game</h1>
+  <p>Score: <span id="score">0</span></p>
+  <p>Time Left: <span id="time">10s</span></p>
+  <p>Best Score: <span id="best">0</span></p>
+  <button onclick="clickMe()">Click Me!</button>
+  <button onclick="startGame()">Start Game</button>
+  <p id="result"></p>
 </div>
 
-<script>
-let score=0,timeLeft=10,timer=null,playing=false;
-let best=localStorage.getItem('vijay_best')||0;
-document.getElementById('best').innerText=best;
-
-function startGame(){
-  score=0;timeLeft=10;playing=true;
-  document.getElementById('score').innerText=0;
-  document.getElementById('result').innerText='';
-  document.getElementById('fill').style.width='100%';
-  moveBtn();clearInterval(timer);
-  timer=setInterval(()=>{
-    timeLeft--;
-    document.getElementById('time').innerText=timeLeft+'s';
-    document.getElementById('fill').style.width=(timeLeft*10)+'%';
-    if(timeLeft<=0){
-      clearInterval(timer);playing=false;
-      document.getElementById('result').innerText='Game Over! Nee Score: '+score+' 🎉';
-      if(score>best){best=score;localStorage.setItem('vijay_best',best);document.getElementById('best').innerText=best;alert('New Best Score mama! 🏆 '+score);}
-    }
-  },1000);
-}
-function moveBtn(){
-  let b=document.getElementById('clickBtn');
-  b.style.left=Math.random()*65+'%';
-  b.style.top=Math.random()*65+'%';
-}
-function clickMe(e){
-  if(!playing){alert('Mundhu START GAME kottu mama!');return;}
-  score++;document.getElementById('score').innerText=score;
-  let p=document.createElement('div');p.id='plus';p.innerText='+1';
-  p.style.left=e.clientX+'px';p.style.top=e.clientY+'px';
-  document.body.appendChild(p);setTimeout(()=>p.remove(),600);
-  moveBtn();
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>
