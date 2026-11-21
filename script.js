@@ -1,78 +1,41 @@
-```javascript
 let score = 0;
 let timeLeft = 10;
-let gameActive = false;
+let timer = null;
+let playing = false;
 
-// Load saved Top Score from browser
-let topScore = Number(localStorage.getItem('topScore')) || 0;
+let best = localStorage.getItem('best') || 0;
+document.getElementById('best').innerText = best;
 
-const scoreDisplay = document.getElementById('score');
-const timeDisplay = document.getElementById('time');
-const topScoreDisplay = document.getElementById('topScore');
+function startGame(){
+  score = 0;
+  timeLeft = 10;
+  playing = true;
+  document.getElementById('score').innerText = 0;
+  document.getElementById('time').innerText = '10s';
+  document.getElementById('result').innerText = '';
+  clearInterval(timer);
 
-
-const gameButton = document.getElementById('gameButton');
-const startButton = document.getElementById('startButton');
-const memeDisplay = document.getElementById('memeMessage');
-
-// Display saved Top Score when page opens
-if (topScoreDisplay) {
-    topScoreDisplay.textContent = topScore;
-}
-
-gameButton.disabled = true;
-
-startButton.addEventListener('click', startGame);
-gameButton.addEventListener('click', increaseScore);
-
-function startGame() {
-    if (!gameActive) {
-        gameActive = true;
-        score = 0;
-        timeLeft = 10;
-
-        scoreDisplay.textContent = score;
-        timeDisplay.textContent = timeLeft;
-
-        gameButton.disabled = false;
-        startButton.disabled = true;
-
-        const timer = setInterval(() => {
-            timeLeft--;
-            timeDisplay.textContent = timeLeft;
-
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                endGame();
-            }
-        }, 1000);
+  timer = setInterval(function(){
+    timeLeft--;
+    document.getElementById('time').innerText = timeLeft + 's';
+    if(timeLeft <= 0){
+      clearInterval(timer);
+      playing = false;
+      document.getElementById('result').innerText = 'Game Over! Nee Score: ' + score;
+      if(score > best){
+        best = score;
+        localStorage.setItem('best', best);
+        document.getElementById('best').innerText = best;
+      }
     }
+  }, 1000);
 }
 
-function increaseScore() {
-    if (gameActive) {
-        score++;
-        scoreDisplay.textContent = score;
-
-        // Update Top Score automatically
-        if (score > topScore) {
-            topScore = score;
-
-            if (topScoreDisplay) {
-                topScoreDisplay.textContent = topScore;
-            }
-
-            // Save Top Score permanently in this browser
-            localStorage.setItem('topScore', topScore);
-        }
-    }
+function clickMe(){
+  if(!playing){
+    alert('Mundhu Start Game kottu mama!');
+    return;
+  }
+  score++;
+  document.getElementById('score').innerText = score;
 }
-
-function endGame() {
-    gameActive = false;
-    gameButton.disabled = true;
-    startButton.disabled = false;
-
-    alert(`Game Over! Your score: ${score}`);
-}
-```
