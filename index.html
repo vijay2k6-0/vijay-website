@@ -57,9 +57,9 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <button class="btn-blue" onclick="joinMultiRoom()">Join Room</button>
 <p>Room: <b id="multiRoom" style="color:#ff6600">None</b></p>
 <div class="vs">
-<div><b>YOU</b><h2 id="myMultiScore" style="color:#ff6600">0</h2><p id="myMultiName">You</p></div>
+<div><b>YOU</b><h2 id="myMultiScore" style="color:#ff6600">0</h2><p id="myMultiName">You</p><p id="myReady" style="color:green;font-weight:bold"></p></div>
 <div><b>VS</b><h2 id="multiTimer">10s</h2><p id="multiStatus">Waiting...</p></div>
-<div><b>FRIEND</b><h2 id="oppMultiScore" style="color:#2196F3">0</h2><p id="oppMultiName">Waiting...</p></div>
+<div><b>FRIEND</b><h2 id="oppMultiScore" style="color:#2196F3">0</h2><p id="oppMultiName">Waiting...</p><p id="oppReady" style="color:green;font-weight:bold"></p></div>
 </div>
 <div id="multiMeme" style="font-size:70px">⚔️</div>
 <div id="multiText" style="color:#ff6600;font-weight:900">Friend ni raammanu!</div><br>
@@ -146,8 +146,66 @@ function clickMe(){ if(!playing) return alert('Mundhu Start Game kottu mama!'); 
 // MULTIPLAYER
 function createMultiRoom(){ var r=document.getElementById('multiRoomName').value.trim(); if(!r) return alert('Room peru pettu mama!'); db.ref('multi/'+r).set({createdBy:currentUser,status:'waiting'}); joinMultiRoomByName(r); }
 function joinMultiRoom(){ var r=document.getElementById('multiRoomName').value.trim(); if(!r) return alert('Room peru pettu mama!'); joinMultiRoomByName(r); }
-function joinMultiRoomByName(r){ multiRoom=r; document.getElementById('multiRoom').innerText=r; document.getElementById('myMultiName').innerText=currentUser; db.ref('multi/'+r+'/players/'+currentUser).set({username:currentUser,score:0}); db.ref('multi/'+r+'/players/'+currentUser).onDisconnect().remove(); db.ref('multi/'+r+'/players').on('value',s=>{ var opp="",oppScore=0,myS=0; s.forEach(c=>{ var v=c.val(); if(v.username===currentUser) myS=v.score; else{ opp=v.username; oppScore=v.score; } }); document.getElementById('oppMultiName').innerText=opp||'Waiting...'; document.getElementById('oppMultiScore').innerText=oppScore; document.getElementById('myMultiScore').innerText=myS; if(opp){ document.getElementById('multiStatus').innerText='✅ '+opp+' Joined!'; document.getElementById('multiText').innerText='Friend vachesadu! START kottu!'; } }); db.ref('multi/'+r+'/game').on('value',s=>{ if(!s.exists()) return; var g=s.val(); if(g.status==='playing' && !mPlaying){ startMultiLocal(); } document.getElementById('multiTimer').innerText=(g.timeLeft||10)+'s'; }); alert('Room lo join ayyav: '+r); }
-function startMultiGame(){ if(!multiRoom) return alert('Mundhu Room Join Avvu mama!'); db.ref('multi/'+multiRoom+'/game').set({status:'playing',timeLeft:10,startedBy:currentUser}); startMultiLocal(); }
-function startMultiLocal(){ mScore=0;mTime=10;mPlaying=true; document.getElementById('myMultiScore').innerText=0; document.getElementById('multiResult').innerText=''; document.getElementById('multiMeme').innerText='🔥'; document.getElementById('multiText').innerText='KOTTU MAMA! Friend ni odinchu!'; db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:0}); clearInterval(mTimer); mTimer=setInterval(()=>{ mTime--; document.getElementById('multiTimer').innerText=mTime+'s'; if(mTime<=0){ clearInterval(mTimer); mPlaying=false; var myFinal=mScore; var oppFinal=parseInt(document.getElementById('oppMultiScore').innerText)||0; var oldBest=myData.best||0; var newBest=Math.max(oldBest,myFinal); db.ref('users/'+currentUser).update({best:newBest,games:(myData.games||0)+1}); if(myFinal>oppFinal){ document.getElementById('multiResult').innerText='🏆 YOU WIN! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='👑'; document.getElementById('multiText').innerText='ABHAA! Nuvve King!'; }else if(myFinal<oppFinal){ document.getElementById('multiResult').innerText='😭 YOU LOSE! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='😭'; document.getElementById('multiText').innerText='Friend gelichadu! Malli kottu!'; }else{ document.getElementById('multiResult').innerText='🤝 DRAW! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='🤝'; } db.ref('multi/'+multiRoom+'/game').set({status:'finished',timeLeft:0}); } },1000); }
+function joinMultiRoomByName(r){
+  multiRoom=r; document.getElementById('multiRoom').innerText=r; document.getElementById('myMultiName').innerText=currentUser;
+  db.ref('multi/'+r+'/players/'+currentUser).set({username:currentUser,score:0,ready:false});
+  db.ref('multi/'+r+'/players/'+currentUser).onDisconnect().remove();
+  db.ref('multi/'+r+'/players').on('value',s=>{
+    var opp="",oppScore=0,myS=0,myReady=false,oppReady=false;
+    s.forEach(c=>{ var v=c.val(); if(v.username===currentUser){ myS=v.score; myReady=v.ready; } else{ opp=v.username; oppScore=v.score; oppReady=v.ready; } });
+    document.getElementById('oppMultiName').innerText=opp||'Waiting...';
+    document.getElementById('oppMultiScore').innerText=oppScore;
+    document.getElementById('myMultiScore').innerText=myS;
+    document.getElementById('myReady').innerText=myReady?'✅ READY':'';
+    document.getElementById('oppReady').innerText=oppReady?'✅ READY':'';
+    if(opp && oppReady && !myReady) document.getElementById('multiStatus').innerText='Friend READY! Nuvvu kottu!';
+    checkBothReady();
+  });
+  db.ref('multi/'+r+'/game').on('value',s=>{
+    if(!s.exists()) return;
+    var g=s.val();
+    if(g.status==='playing' && !mPlaying){ startMultiLocal(); }
+    document.getElementById('multiTimer').innerText=(g.timeLeft||10)+'s';
+  });
+  alert('Room lo join ayyav: '+r);
+}
+function startMultiGame(){
+  if(!multiRoom) return alert('Mundhu Room Join Avvu mama!');
+  db.ref('multi/'+multiRoom+'/players/'+currentUser).update({ready:true, score:0});
+  document.getElementById('multiText').innerText='Nuvvu READY! Friend kosam waiting... ⌛';
+  document.getElementById('multiResult').innerText='⌛ Waiting for Friend...';
+}
+function checkBothReady(){
+  if(!multiRoom || mPlaying) return;
+  db.ref('multi/'+multiRoom+'/players').once('value', s=>{
+    var readyCount=0, total=0;
+    s.forEach(c=>{ total++; if(c.val().ready) readyCount++; });
+    if(total>=2 && readyCount>=2){
+      db.ref('multi/'+multiRoom+'/game').set({status:'playing', timeLeft:10, startAt: Date.now()});
+      s.forEach(c=>{ db.ref('multi/'+multiRoom+'/players/'+c.key).update({ready:false}); });
+    }
+  });
+}
+function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=true;
+  document.getElementById('myMultiScore').innerText=0;
+  document.getElementById('multiResult').innerText='';
+  document.getElementById('multiMeme').innerText='🔥';
+  document.getElementById('multiText').innerText='IDDARU READY! KOTTU MAMA! 🔥';
+  db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:0});
+  clearInterval(mTimer);
+  mTimer=setInterval(()=>{
+    mTime--; document.getElementById('multiTimer').innerText=mTime+'s';
+    if(mTime<=0){
+      clearInterval(mTimer); mPlaying=false;
+      var myFinal=mScore; var oppFinal=parseInt(document.getElementById('oppMultiScore').innerText)||0;
+      db.ref('users/'+currentUser).once('value', ss=>{ var oldBest=ss.exists()?(ss.val().best||0):0; var newBest=Math.max(oldBest,myFinal); db.ref('users/'+currentUser).update({best:newBest}); myData.best=newBest; });
+      if(myFinal>oppFinal){ document.getElementById('multiResult').innerText='🏆 YOU WIN! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='👑'; document.getElementById('multiText').innerText='ABHAA! Nuvve King!'; }
+      else if(myFinal<oppFinal){ document.getElementById('multiResult').innerText='😭 YOU LOSE! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='😭'; document.getElementById('multiText').innerText='Friend gelichadu! Malli kottu!'; }
+      else{ document.getElementById('multiResult').innerText='🤝 DRAW! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='🤝'; }
+      db.ref('multi/'+multiRoom+'/game').set({status:'finished', timeLeft:0, startAt: Date.now()});
+    }
+  },1000);
+}
+ 
 function clickMulti(){ if(!mPlaying) return alert('Mundhu START BATTLE kottu mama!'); mScore++; document.getElementById('myMultiScore').innerText=mScore; db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:mScore}); if(mScore===20) document.getElementById('multiText').innerText='20! Friend ni odisthunnav!'; if(mScore===50) document.getElementById('multiText').innerText='50!! MASS MAMA!'; }
 </script></body></html>
