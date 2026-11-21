@@ -9,6 +9,7 @@ let topScore = Number(localStorage.getItem('topScore')) || 0;
 const scoreDisplay = document.getElementById('score');
 const timeDisplay = document.getElementById('time');
 const topScoreDisplay = document.getElementById('topScore');
+const memeDisplay = document.getElementById('memeMessage');
 
 const gameButton = document.getElementById('gameButton');
 const startButton = document.getElementById('startButton');
