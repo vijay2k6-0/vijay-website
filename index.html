@@ -26,6 +26,7 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <input id="password" type="password" placeholder="Password"><br>
 <button onclick="doRegister()">Register</button>
 <button class="btn-blue" onclick="doLogin()">Login</button>
+ <button class="btn-grey" onclick="forgotPassword()" style="background:#ff9800">Forgot Password? 🤔</button> 
 <p id="authMsg" style="color:#ff6600;font-weight:bold"></p>
 </div>
 
@@ -89,6 +90,17 @@ function getUP(){return {u:document.getElementById('username').value.trim(),p:do
 function msg(t){document.getElementById('authMsg').innerText=t}
 function doRegister(){ var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!'); db.ref('users/'+d.u).once('value',s=>{ if(s.exists()) msg('Already undhi! LOGIN kottu!'); else{ db.ref('users/'+d.u).set({username:d.u,password:d.p,best:0,games:0}); msg('Register ayipoyindhi! Ippudu LOGIN kottu!'); document.getElementById('password').value=''; } }); }
 function doLogin(){ var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!'); db.ref('users/'+d.u).once('value',s=>{ if(!s.exists()){msg('Username ledhu! REGISTER kottu!');return;} var data=s.val(); if(data.password!==d.p){msg('Wrong Password!');return;} currentUser=d.u; myData=data; document.getElementById('authScreen').classList.add('hidden'); document.getElementById('mainScreen').classList.remove('hidden'); document.getElementById('best').innerText=myData.best||0; startLive(); }); }
+function forgotPassword(){
+  var u = prompt("Nee Username enti mama?");
+  if(!u) return;
+  db.ref('users/'+u).once('value', s=>{
+    if(!s.exists()){ alert("❌ Ee username ledhu mama! REGISTER chesuko!"); return; }
+    var np = prompt("Kotha Password enti mama? - "+u+" kosam");
+    if(!np) return;
+    db.ref('users/'+u).update({password: np});
+    alert("✅ Password maripoyindhi mama! Ippudu kotha password tho LOGIN kottu!");
+  });
+}
 function logout(){ location.reload(); }
 function showSolo(){ document.getElementById('gameCard').classList.remove('hidden'); document.getElementById('multiCard').classList.add('hidden'); document.getElementById('boardCard').classList.add('hidden'); }
 function showMulti(){ document.getElementById('gameCard').classList.add('hidden'); document.getElementById('multiCard').classList.remove('hidden'); document.getElementById('boardCard').classList.add('hidden'); }
