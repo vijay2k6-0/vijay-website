@@ -178,11 +178,13 @@ function startMultiGame(){
 function checkBothReady(){
   if(!multiRoom || mPlaying) return;
   db.ref('multi/'+multiRoom+'/players').once('value', s=>{
-    var readyCount=0, total=0;
-    s.forEach(c=>{ total++; if(c.val().ready) readyCount++; });
-    if(total>=2 && readyCount>=2){
+    var players=[];
+    s.forEach(c=>players.push(c.val()));
+    // DEBUG: Console lo chudu mama
+    console.log('Players in room:', players);
+    if(players.length>=2 && players.every(p=>p.ready)){
+      console.log('IDDARU READY - GAME START!');
       db.ref('multi/'+multiRoom+'/game').set({status:'playing', timeLeft:10, startAt: Date.now()});
-      s.forEach(c=>{ db.ref('multi/'+multiRoom+'/players/'+c.key).update({ready:false}); });
     }
   });
 }
@@ -198,7 +200,7 @@ function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=tr
     if(mTime<=0){
       clearInterval(mTimer); mPlaying=false;
       var myFinal=mScore; var oppFinal=parseInt(document.getElementById('oppMultiScore').innerText)||0;
-      db.ref('users/'+currentUser).once('value', ss=>{ var oldBest=ss.exists()?(ss.val().best||0):0; var newBest=Math.max(oldBest,myFinal); db.ref('users/'+currentUser).update({best:newBest}); myData.best=newBest; });
+     db.ref('users/'+currentUser).once('value', ss=>{ var oldBest=ss.exists()?(ss.val().best||0):0; var newBest=Math.max(oldBest,myFinal); db.ref('users/'+currentUser).update({best:newBest}); myData.best=newBest; document.getElementById('best').innerText=newBest; console.log('TOP SCORE UPDATED:', newBest); });
       if(myFinal>oppFinal){ document.getElementById('multiResult').innerText='🏆 YOU WIN! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='👑'; document.getElementById('multiText').innerText='ABHAA! Nuvve King!'; }
       else if(myFinal<oppFinal){ document.getElementById('multiResult').innerText='😭 YOU LOSE! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='😭'; document.getElementById('multiText').innerText='Friend gelichadu! Malli kottu!'; }
       else{ document.getElementById('multiResult').innerText='🤝 DRAW! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='🤝'; }
