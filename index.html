@@ -111,7 +111,37 @@ function startLive(){
 }
 // MEMES - Mundhu cheppinavi anni
 function showMeme(e,t,c,a){ var box=document.getElementById('memeBox'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('memeText').innerText=t; document.getElementById('commentBox').innerText=c; }
-function startGame(){ score=0;timeLeft=10;playing=true; document.getElementById('score').innerText=0;document.getElementById('time').innerText='10s';document.getElementById('result').innerText=''; showMeme('😎','Ready ah?','Kottu mama!','meme-big'); clearInterval(timer); timer=setInterval(()=>{ timeLeft--;document.getElementById('time').innerText=timeLeft+'s'; if(timeLeft<=0){ clearInterval(timer);playing=false; var oldBest=myData.best||0; var newBest=Math.max(oldBest,score); db.ref('users/'+currentUser).update({best:newBest,games:(myData.games||0)+1}); if(score>oldBest&&score>0){ showMeme('👑','ABHAA!!','Top Score kottesav mama! Nuvve King!','meme-blast'); document.getElementById('result').innerText='🔥 NEW TOP SCORE! '+score; }else if(score>=50){ showMeme('🔥','KOTTU KOTTU!!','50!! Mass mama!','meme-blast'); document.getElementById('result').innerText='Game Over! Nee Score: '+score; }else{ showMeme('😏','Ravatledhaa?','Inka try chey mama!','meme-shake'); document.getElementById('result').innerText='Game Over! Nee Score: '+score; } } },1000); }
+function startGame(){
+  score=0;timeLeft=10;playing=true;
+  document.getElementById('score').innerText=0;
+  document.getElementById('time').innerText='10s';
+  document.getElementById('result').innerText='';
+  showMeme('😎','Ready ah?','Kottu mama!','meme-big');
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    timeLeft--;
+    document.getElementById('time').innerText=timeLeft+'s';
+    if(timeLeft<=0){
+      clearInterval(timer); playing=false;
+      // FIX: Database nundi latest Best ni thechukuni update chesthundhi
+      db.ref('users/'+currentUser).once('value', s=>{
+        var oldBest = 0;
+        if(s.exists()) oldBest = s.val().best || 0;
+        var newBest = Math.max(oldBest, score);
+        db.ref('users/'+currentUser).update({best:newBest, games:(myData.games||0)+1});
+        myData.best = newBest;
+        document.getElementById('best').innerText = newBest;
+        if(score>oldBest && score>0){
+          showMeme('👑','ABHAA!!','Top Score kottesav mama! Nuvve King!','meme-blast');
+          document.getElementById('result').innerText='🔥 NEW TOP SCORE! '+score;
+        } else {
+          showMeme('😏','Ravatledhaa?','Inka try chey mama!','meme-shake');
+          document.getElementById('result').innerText='Game Over! Nee Score: '+score+' | Best: '+newBest;
+        }
+      });
+    }
+  },1000);
+}
 function clickMe(){ if(!playing) return alert('Mundhu Start Game kottu mama!'); score++;document.getElementById('score').innerText=score; if(score===10) showMeme('😲','WOWW!!','10 ayipoyindhi mama! Super!','meme-big'); else if(score===20) showMeme('💪','CAMON!!','20 vachesindhi! Aapu mama!','meme-big'); else if(score===30) showMeme('⚡','SPEED!!','30! Inka fast!','meme-big'); else if(score===40) showMeme('🦁','SIMHAM!!','40! Evaru aapaleru!','meme-big'); else if(score===50) showMeme('🔥','KOTTU KOTTU!!','50!! Aarey mass mama! Aapaku!','meme-blast'); else{ var n=['😎','😜','🤩','😁']; document.getElementById('memeBox').innerText=n[Math.floor(Math.random()*n.length)]; document.getElementById('commentBox').innerText='Score: '+score+' - Kottu mama!'; } }
 // MULTIPLAYER
 function createMultiRoom(){ var r=document.getElementById('multiRoomName').value.trim(); if(!r) return alert('Room peru pettu mama!'); db.ref('multi/'+r).set({createdBy:currentUser,status:'waiting'}); joinMultiRoomByName(r); }
