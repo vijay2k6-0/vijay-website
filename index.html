@@ -1,174 +1,119 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vijay Game - REAL ONLINE</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vijay Game</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#111;color:#fff;padding:15px}
-h2{text-align:center;color:#ffcc00}.card{background:#1e1e1e;padding:15px;border-radius:12px;max-width:480px;margin:10px auto}
-input{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:none;background:#333;color:#fff}
-button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:8px;background:#4CAF50;color:#fff;font-weight:bold;font-size:16px}
-button.blue{background:#2196F3}button.orange{background:#ff6600}button.red{background:#e91e63}button.grey{background:#555}
-.top{display:flex;justify-content:space-between;align-items:center;max-width:480px;margin:auto}
-.avatar{width:70px;height:70px;border-radius:50%;background:#ff6600;display:flex;align-items:center;justify-content:center;font-size:32px;margin:auto}
-.hidden{display:none}.flex{display:flex;gap:8px}.flex button{flex:1}
-#memeBox{font-size:70px;text-align:center;height:80px}
-#memeText{text-align:center;color:#ff00aa;font-weight:900;min-height:25px}
-.chatbox{height:200px;overflow-y:auto;background:#222;padding:8px;border-radius:8px;margin:8px 0;font-size:14px}
-.room{background:#333;padding:10px;border-radius:8px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
-.scoreBig{font-size:50px;text-align:center;color:#ffcc00}
-.live{color:#4CAF50;font-size:12px;text-align:center}
-</style>
-</head>
-<body>
-<h2>🎮 VIJAY GAME - LIVE</h2>
-<p class="live" id="connStatus">● Connecting to Firebase...</p>
-
+body{background:#0f0f0f;color:white;font-family:Arial;padding:10px}
+.card{background:#1e1e1e;padding:15px;border-radius:12px;margin:10px 0}
+button{padding:12px 18px;border:none;border-radius:10px;background:#ff6600;color:white;font-weight:bold;margin:5px;width:100%}
+input{padding:12px;width:92%;border-radius:10px;border:none;margin:5px 0;background:#333;color:white}
+.hidden{display:none}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.4) rotate(5deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-5deg)}75%{transform:translateX(10px) rotate(5deg)}}
+@keyframes blast{0%{transform:scale(0)}50%{transform:scale(1.6)}100%{transform:scale(1)}}
+.meme-big{animation:bounce .5s ease}.meme-shake{animation:shake .5s ease}.meme-blast{animation:blast .6s ease}
+</style></head><body>
+<h2 style="text-align:center">🔥 VIJAY GAME 🔥</h2>
 <div id="authScreen" class="card">
-<h3 id="authTitle">Login / Register</h3>
-<input id="username" placeholder="Username - ex: vijay">
+<h3>Login / Register</h3>
+<input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<button class="blue" onclick="register()">Register</button>
-<p style="font-size:12px;text-align:center;color:#aaa">Real-Time - Vere phone lo kuda kanipisthundhi</p>
-</div>
+<button onclick="login()">Login / Register</button>
+<p id="authMsg"></p></div>
 
 <div id="mainScreen" class="hidden">
-<div class="top"><b id="welcome">Hi!</b><button style="width:auto" class="red" onclick="logout()">Logout</button></div>
-<div class="card">
-<div class="avatar">😎</div>
-<h3 style="text-align:center" id="profileName">Vijay</h3>
-<p style="text-align:center">Best Score: <b id="profileBest" style="color:#ffcc00">0</b> | Games: <span id="profileGames">0</span></p>
-<div class="flex"><button onclick="showScreen('gameScreen')">🎮 Play Game</button><button class="blue" onclick="showScreen('roomScreen')">🏠 Rooms</button></div>
-<div class="flex"><button class="orange" onclick="showScreen('leaderScreen')">🏆 Leaderboard</button><button class="red" onclick="showScreen('friendsScreen')">👥 Online Friends</button></div>
-<button class="grey" onclick="showScreen('chatScreen')">💬 Live Chat</button>
-</div>
+<div class="card"><h3>Hi <span id="myName"></span>! Best: <span id="myBest">0</span></h3>
+<button onclick="showGame()">🎮 Click Game</button>
+<button onclick="showRooms()">🏠 Rooms</button>
+<button onclick="showChat()">💬 Chat</button>
+<button onclick="showBoard()">🏆 Leaderboard</button></div>
 
 <div id="gameScreen" class="card hidden">
 <h3>Click Game - 10 Sec</h3>
 <p>Score: <span id="score">0</span> | Time: <span id="time">10s</span> | Best: <span id="best">0</span></p>
-<div id="memeBox">😎</div><div id="memeText">Ready ah?</div>
-<button onclick="clickMe()" style="padding:20px;font-size:20px">CLICK ME!</button>
+<div id="memeBox" style="font-size:90px;text-align:center;height:100px">😎</div>
+<div id="memeText" style="text-align:center;color:#ffcc00;font-weight:900;font-size:22px;min-height:30px">Ready ah?</div>
+<div id="commentBox" style="text-align:center;color:#00ffcc;font-weight:bold;font-size:16px;min-height:25px">Click kottu mama!</div>
+<button onclick="clickMe()" style="padding:20px;font-size:20px;background:#ff6600">CLICK ME! 👆</button>
 <button onclick="startGame()">Start Game</button>
-<p id="result" style="color:#4CAF50"></p>
+<p id="result" style="text-align:center;color:#4CAF50;font-weight:bold"></p></div>
+
+<div id="roomsScreen" class="card hidden"><h3>Rooms</h3><input id="roomName" placeholder="Room peru"><button onclick="createRoom()">Create Room</button><div id="roomList"></div></div>
+<div id="chatScreen" class="card hidden"><h3>Chat</h3><div id="chatBox" style="height:150px;overflow:auto;background:#111;padding:10px;border-radius:10px"></div><input id="chatMsg" placeholder="Message..."><button onclick="sendChat()">Send</button></div>
+<div id="boardScreen" class="card hidden"><h3>Leaderboard</h3><div id="boardList"></div></div>
 </div>
 
-<div id="roomScreen" class="card hidden">
-<h3>Create / Join Room - LIVE</h3>
-<input id="roomName" placeholder="Room Name">
-<button onclick="createRoom()">Create Room</button>
-<div id="roomList">Loading rooms...</div>
-</div>
-
-<div id="leaderScreen" class="card hidden">
-<h3>🏆 Live Leaderboard</h3>
-<div id="leaderList">Loading...</div>
-</div>
-
-<div id="friendsScreen" class="card hidden">
-<h3>👥 Online Friends - LIVE</h3>
-<div id="friendList">Loading...</div>
-</div>
-
-<div id="chatScreen" class="card hidden">
-<h3>💬 Live Chat</h3>
-<div class="chatbox" id="chatBox"></div>
-<input id="chatInput" placeholder="Message...">
-<button class="blue" onclick="sendChat()">Send</button>
-</div>
-</div>
-
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-// NEE FIREBASE CONFIG
-const firebaseConfig = {
-  apiKey: "AIzaSyAErFJ0lp-3v83_ehKfTS2-mYIJ76OMhT4",
-  authDomain: "vijiraiya-game-art.firebaseapp.com",
-  databaseURL: "https://vijiraiya-game-art-default-rtdb.firebaseio.com",
-  projectId: "vijiraiya-game-art",
-  storageBucket: "vijiraiya-game-art.firebasestorage.app",
-  messagingSenderId: "651668519217",
-  appId: "1:651668519217:web:e7ea4419104943b2031810",
-  measurementId: "G-QZ0D02EF7X"
-};
+// NEE FIREBASE CONFIG IKKADA - Nee old file lo unna config idhe unte marchaku
+var firebaseConfig={apiKey:"AIzaSyB-EXAMPLE",authDomain:"vijiraiya-game-art.firebaseapp.com",databaseURL:"https://vijiraiya-game-art-default-rtdb.firebaseio.com",projectId:"vijiraiya-game-art",storageBucket:"vijiraiya-game-art.appspot.com",messagingSenderId:"123456789",appId:"1:123456789:web:example"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-let currentUser = localStorage.getItem('vijay_user') || '';
-let myData = {best:0, games:0};
+var db=firebase.database();
+var currentUser="",myData={best:0,games:0};
+var score=0,timeLeft=10,timer=null,playing=false;
 
-function register(){
-  let u=document.getElementById('username').value.trim();
-  let p=document.getElementById('password').value.trim();
-  if(!u||!p) return alert('Username & Password pettu mama!');
-  db.ref('users/'+u).once('value', snap=>{
-    if(snap.exists()) return alert('Ee peru already undhi, Login chey!');
-    db.ref('users/'+u).set({name:u, pass:p, best:0, games:0}).then(()=>{ loginSuccess(u); });
-  });
-}
 function login(){
-  let u=document.getElementById('username').value.trim();
-  let p=document.getElementById('password').value.trim();
-  db.ref('users/'+u).once('value', snap=>{
-    if(!snap.exists()) return alert('User ledu, Register chey mama!');
-    if(snap.val().pass !== p) return alert('Wrong Password mama!');
-    loginSuccess(u);
-  });
-}
-function loginSuccess(u){
-  currentUser=u; localStorage.setItem('vijay_user',u);
-  document.getElementById('authScreen').classList.add('hidden');
-  document.getElementById('mainScreen').classList.remove('hidden');
-  document.getElementById('welcome').innerText='Hi, '+u+' 👋';
-  document.getElementById('profileName').innerText=u;
-  // ONLINE PRESENCE
-  let myRef = db.ref('online/'+u);
-  myRef.set({name:u, time: Date.now()});
-  myRef.onDisconnect().remove();
-  // LISTEN MY DATA
-  db.ref('users/'+u).on('value', snap=>{
-    if(!snap.exists()) return;
-    myData=snap.val();
-    document.getElementById('profileBest').innerText=myData.best||0;
-    document.getElementById('profileGames').innerText=myData.games||0;
+  var u=document.getElementById('username').value.trim();
+  var p=document.getElementById('password').value.trim();
+  if(!u||!p) return alert('Username + Password ivvu mama');
+  currentUser=u;
+  db.ref('users/'+u).once('value',s=>{
+    if(!s.exists()){ db.ref('users/'+u).set({username:u,password:p,best:0,games:0}); myData={best:0,games:0}; }
+    else{ myData=s.val(); if(myData.password!==p) return alert('Wrong password mama!'); }
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('mainScreen').classList.remove('hidden');
+    document.getElementById('myName').innerText=u;
+    document.getElementById('myBest').innerText=myData.best||0;
     document.getElementById('best').innerText=myData.best||0;
-  });
-  listenAll();
-}
-function logout(){ db.ref('online/'+currentUser).remove(); localStorage.removeItem('vijay_user'); location.reload(); }
-function showScreen(id){ ['gameScreen','roomScreen','leaderScreen','friendsScreen','chatScreen'].forEach(x=>document.getElementById(x).classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-
-let score=0,timeLeft=10,timer=null,playing=false;
-let memes=[{e:"🔥",t:"Thaggeede Le!"},{e:"😎",t:"Oora Mass Mama!"},{e:"💪",t:"Arey Mass!"},{e:"🤣",t:"Nuvvu Naa Range Kaadu!"},{e:"👑",t:"Vijay Vachesadu!"}];
-function startGame(){ score=0; timeLeft=10; playing=true; document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText=''; clearInterval(timer); timer=setInterval(()=>{ timeLeft--; document.getElementById('time').innerText=timeLeft+'s'; if(timeLeft<=0){ clearInterval(timer); playing=false; let newBest=Math.max(myData.best||0, score); let newGames=(myData.games||0)+1; db.ref('users/'+currentUser).update({best:newBest, games:newGames}); document.getElementById('result').innerText='Game Over! Score: '+score+' - LIVE Leaderboard lo update ayindhi!'; } },1000); }
-function clickMe(){ if(!playing) return alert('Mundhu Start Game kottu!'); score++; document.getElementById('score').innerText=score; let m=memes[Math.floor(Math.random()*memes.length)]; document.getElementById('memeBox').innerText=m.e; document.getElementById('memeText').innerText=m.t; }
-
-function createRoom(){ let n=document.getElementById('roomName').value.trim(); if(!n) return alert('Room peru pettu!'); db.ref('rooms').push({name:n, owner:currentUser, players:1, time:Date.now()}); document.getElementById('roomName').value=''; }
-function joinRoom(key){ db.ref('rooms/'+key+'/players').transaction(p=>(p||0)+1); alert('Room lo join ayyav! Game aadu mama!'); showScreen('gameScreen'); }
-
-function sendChat(){ let t=document.getElementById('chatInput').value.trim(); if(!t) return; db.ref('chats').push({from:currentUser, text:t, time:Date.now()}); document.getElementById('chatInput').value=''; }
-
-function listenAll(){
-  db.ref('.info/connected').on('value', s=>{ document.getElementById('connStatus').innerText = s.val() ? '● LIVE Connected - Vere mobiles lo kuda kanipisthundhi' : '● Offline...'; });
-  db.ref('rooms').on('value', snap=>{
-    let v=snap.val()||{}; let h='';
-    Object.keys(v).forEach(k=>{ h+=`<div class="room"><b>${v[k].name}</b><span>By ${v[k].owner} • ${v[k].players} Players</span><button style="width:auto" onclick="joinRoom('${k}')">Join</button></div>`; });
-    document.getElementById('roomList').innerHTML = h || 'No Rooms, nuvve create chey mama!';
-  });
-  db.ref('users').on('value', snap=>{
-    let v=snap.val()||{}; let arr=Object.values(v).sort((a,b)=>(b.best||0)-(a.best||0));
-    document.getElementById('leaderList').innerHTML = arr.map((u,i)=>`<p>${i+1}. ${u.name} - <b style="color:#ffcc00">${u.best||0}</b> ${u.name==currentUser?'(Nuvvu)':''}</p>`).join('');
-  });
-  db.ref('online').on('value', snap=>{
-    let v=snap.val()||{}; let h=Object.values(v).map(f=>`<p>🟢 ${f.name} <span style="color:#4CAF50">Online</span> ${f.name==currentUser?'(Nuvvu)':''}</p>`).join('');
-    document.getElementById('friendList').innerHTML = h || 'Evaru online lo leru';
-  });
-  db.ref('chats').limitToLast(30).on('value', snap=>{
-    let v=snap.val()||{}; let h=Object.values(v).map(c=>`<div><b style="color:${c.from==currentUser?'#4CAF50':'#ffcc00'}">${c.from}:</b> ${c.text}</div>`).join('');
-    let box=document.getElementById('chatBox'); box.innerHTML = h || 'Chat ledu, nuvve start chey!'; box.scrollTop=9999;
+    loadChat(); loadRooms(); loadBoard();
   });
 }
-if(currentUser) loginSuccess(currentUser);
-</script>
-</body>
-</html>
+function hideAll(){['gameScreen','roomsScreen','chatScreen','boardScreen'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function showGame(){hideAll();document.getElementById('gameScreen').classList.remove('hidden')}
+function showRooms(){hideAll();document.getElementById('roomsScreen').classList.remove('hidden')}
+function showChat(){hideAll();document.getElementById('chatScreen').classList.remove('hidden')}
+function showBoard(){hideAll();document.getElementById('boardScreen').classList.remove('hidden')}
+
+function showMeme(emoji,text,comment,anim){
+  var box=document.getElementById('memeBox'); box.innerText=emoji; box.className=''; void box.offsetWidth; box.classList.add(anim);
+  document.getElementById('memeText').innerText=text;
+  document.getElementById('commentBox').innerText=comment;
+}
+function startGame(){
+  score=0;timeLeft=10;playing=true;
+  document.getElementById('score').innerText=0;document.getElementById('time').innerText='10s';document.getElementById('result').innerText='';
+  showMeme('😎','Ready ah?','Kottu mama!','meme-big');
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    timeLeft--;document.getElementById('time').innerText=timeLeft+'s';
+    if(timeLeft<=0){
+      clearInterval(timer);playing=false;
+      var oldBest=myData.best||0; var newBest=Math.max(oldBest,score);
+      db.ref('users/'+currentUser).update({best:newBest,games:(myData.games||0)+1});
+      myData.best=newBest; document.getElementById('myBest').innerText=newBest;
+      if(score>oldBest && score>0){
+        showMeme('👑','ABHAA!!','Top Score kottesav mama! Nuvve King!','meme-blast');
+        document.getElementById('result').innerText='🔥 NEW TOP SCORE! '+score+' - Abhaa mama!';
+      }else{
+        showMeme('😏','Ravatledhaa?','Inka try chey mama, nuvvu cheyagalavu!','meme-shake');
+        document.getElementById('result').innerText='Game Over! Score: '+score+' | Best: '+oldBest;
+      }
+    }
+  },1000);
+}
+function clickMe(){
+  if(!playing) return alert('Mundhu Start Game kottu mama!');
+  score++;document.getElementById('score').innerText=score;
+  if(score===10) showMeme('😲','WOWW!!','10 ayipoyindhi mama! Super!','meme-big');
+  else if(score===20) showMeme('💪','CAMON!!','20 vachesindhi! Aapu mama!','meme-big');
+  else if(score===30) showMeme('⚡','SPEED!!','30! Inka fast!','meme-big');
+  else if(score===40) showMeme('🦁','SIMHAM!!','40! Evaru aapaleru!','meme-big');
+  else if(score===50) showMeme('🔥','KOTTU KOTTU!!','50!! Aarey mass mama! Aapaku!','meme-blast');
+  else{ var n=['😎','😜','🤩','😁']; document.getElementById('memeBox').innerText=n[Math.floor(Math.random()*n.length)]; document.getElementById('commentBox').innerText='Score: '+score+' - Kottu mama!'; }
+}
+function createRoom(){var r=document.getElementById('roomName').value.trim(); if(!r) return; db.ref('rooms/'+r).set({createdBy:currentUser,time:Date.now()}); alert('Room created mama!');}
+function loadRooms(){db.ref('rooms').on('value',s=>{var h='';s.forEach(c=>{h+='<div style="padding:10px;background:#333;margin:5px;border-radius:8px">🏠 '+c.key+' - by '+c.val().createdBy+'</div>'});document.getElementById('roomList').innerHTML=h||'No rooms';});}
+function sendChat(){var m=document.getElementById('chatMsg').value.trim(); if(!m) return; db.ref('chat').push({user:currentUser,msg:m,time:Date.now()}); document.getElementById('chatMsg').value='';}
+function loadChat(){db.ref('chat').limitToLast(20).on('value',s=>{var h='';s.forEach(c=>{var v=c.val();h+='<div><b>'+v.user+':</b> '+v.msg+'</div>'});var b=document.getElementById('chatBox');b.innerHTML=h;b.scrollTop=b.scrollHeight;});}
+function loadBoard(){db.ref('users').orderByChild('best').limitToLast(10).on('value',s=>{var arr=[];s.forEach(c=>arr.push(c.val()));arr.reverse();var h='';arr.forEach((u,i)=>{h+='<div style="padding:8px;background:#333;margin:3px;border-radius:8px">'+(i+1)+'. '+u.username+' - '+u.best+'</div>'});document.getElementById('boardList').innerHTML=h;});}
+</script></body></html>
