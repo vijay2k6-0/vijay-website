@@ -1,207 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIJAY GAMING - Neon Tap Rush</title>
+<title>VIJAY GAMING - Click Rush</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
-body{background:#07081a;color:#fff;min-height:100vh;padding-bottom:20px}
-a{color:#00ffcc}
-.top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#0d0f2e;border-bottom:2px solid #00ffcc;position:sticky;top:0;z-index:10}
-.logo{font-size:22px;font-weight:900;color:#00ffcc;text-shadow:0 0 15px #00ffcc}
-.logo span{color:#ff00aa}
-.btn{background:linear-gradient(45deg,#00ffcc,#0088ff);border:none;padding:11px 18px;border-radius:25px;color:#000;font-weight:800;cursor:pointer;box-shadow:0 0 15px #00ffcc;margin:4px}
-.btn.pink{background:linear-gradient(45deg,#ff00aa,#ff8800);color:#fff;box-shadow:0 0 15px #ff00aa}
-.btn.red{background:#ff2222;color:#fff;box-shadow:0 0 12px #ff2222}
-.card{background:#131638;border:1px solid #2a2f6e;border-radius:18px;padding:18px;margin:14px;box-shadow:0 0 20px rgba(0,255,204,.15)}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0a0c22;color:#fff;margin:7px 0;outline:none}
-input:focus{border-color:#00ffcc;box-shadow:0 0 10px #00ffcc}
-.hidden{display:none!important}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.menu-btn{background:#1c2050;border:1px solid #00ffcc;padding:18px 10px;border-radius:16px;color:#fff;font-weight:800;cursor:pointer;text-align:center}
-.menu-btn small{display:block;color:#aaa;font-weight:400;margin-top:5px}
-h2{margin-bottom:10px} h3{color:#00ffcc;margin:12px 0 6px}
-#gameArea{height:280px;background:#000;border:2px dashed #ff00aa;border-radius:16px;position:relative;overflow:hidden;margin:10px 0}
-#tapBtn{position:absolute;padding:16px 22px;border-radius:50%;background:radial-gradient(circle,#ffeb00,#ff00aa);border:3px solid #fff;font-weight:900;cursor:pointer;box-shadow:0 0 25px #ff00aa;transition:.15s}
-.chatbox{height:160px;overflow-y:auto;background:#0a0c22;border-radius:12px;padding:10px;margin:8px 0}
-.msg{background:#1c2050;padding:8px 10px;border-radius:10px;margin:5px 0;font-size:14px}
-.msg b{color:#00ffcc}
-table{width:100%;border-collapse:collapse} td,th{padding:9px;border-bottom:1px solid #2a2f6e;text-align:left;font-size:14px}
-th{color:#00ffcc}
-.profile-pic{width:90px;height:90px;border-radius:50%;background:linear-gradient(45deg,#00ffcc,#ff00aa);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;margin:auto}
-.badge{display:inline-block;background:#ff00aa;padding:3px 10px;border-radius:20px;font-size:12px;margin:2px}
-.online{color:#00ff00;font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#07081a;color:#fff;text-align:center;min-height:100vh;padding:15px;
+background-image:radial-gradient(circle at 20% 20%, #ff00aa33, transparent 40%),radial-gradient(circle at 80% 80%, #00ffcc33, transparent 40%)}
+.top{font-size:13px;color:#00ffcc;letter-spacing:3px;margin-top:10px}
+h1{font-size:32px;margin:8px 0;text-shadow:0 0 20px #ff00aa}
+h1 span{color:#00ffcc;text-shadow:0 0 20px #00ffcc}
+.card{background:#131638;border:1px solid #00ffcc;border-radius:22px;max-width:420px;margin:15px auto;padding:20px;box-shadow:0 0 30px #00ffcc44}
+.scores{display:flex;justify-content:space-around;margin:10px 0}
+.scores div{background:#0a0c22;padding:10px 12px;border-radius:14px;flex:1;margin:0 4px}
+.scores small{color:#aaa} .scores b{font-size:24px;display:block}
+#bar{height:10px;background:#222;border-radius:10px;overflow:hidden;margin:10px 0}
+#fill{height:100%;width:100%;background:linear-gradient(90deg,#00ffcc,#ff00aa);transition:.3s}
+#gameArea{height:260px;background:#000;border:2px dashed #ff00aa;border-radius:18px;position:relative;overflow:hidden;margin:12px 0}
+#clickBtn{position:absolute;left:35%;top:40%;background:radial-gradient(circle,#fff700,#ff00aa);color:#000;font-size:19px;font-weight:900;padding:18px 22px;border:3px solid #fff;border-radius:50%;cursor:pointer;box-shadow:0 0 30px #ff00aa}
+#clickBtn:active{transform:scale(.9)}
+#startBtn{background:linear-gradient(45deg,#00ffcc,#0088ff);border:none;padding:13px 28px;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 0 18px #00ffcc}
+#result{margin-top:12px;font-weight:800;color:#ffeb00;min-height:22px}
+#plus{position:absolute;color:#00ffcc;font-weight:900;font-size:22px;pointer-events:none;animation:up .6s forwards}
+@keyframes up{to{transform:translateY(-40px);opacity:0}}
 </style>
 </head>
 <body>
 
-<div class="top">
-  <div class="logo">VIJAY <span>GAMING</span></div>
-  <div id="topUser">Guest</div>
-</div>
+<div class="top">🔥 VIJAY GAMING • TIME PASS GAME 🔥</div>
+<h1>CLICK <span>RUSH</span></h1>
+<p style="color:#aaa;font-size:13px">10 Sec lo entha fast ga click chesthavo chuddam!</p>
 
-<!-- LOGIN / REGISTER -->
-<div id="authPage" class="card" style="max-width:420px;margin:20px auto">
-  <h2 style="text-align:center;color:#00ffcc">🎮 Welcome to Neon Gaming</h2>
-  <p style="text-align:center;color:#aaa;font-size:13px">Login / Register to Play</p>
-  <input id="regName" placeholder="Username (ex: vijay_king)">
-  <input id="regPass" type="password" placeholder="Password - min 6 chars, 1 Number">
-  <p id="passMsg" style="font-size:12px;color:#ff8888"></p>
-  <button class="btn" style="width:100%" onclick="register()">REGISTER</button>
-  <button class="btn pink" style="width:100%" onclick="login()">LOGIN</button>
-  <p style="font-size:12px;color:#888;text-align:center;margin-top:10px">Demo: First Register chesi, tharuvatha Login avvu.<br>Data nee phone/browser lo save avuthundhi.</p>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashPage" class="hidden">
-  <div class="card">
-    <h2>🔥 Gaming Dashboard</h2>
-    <p>Hi <b id="dashName"></b> 👋 | Your Best Score: <b id="dashScore" style="color:#ffeb00">0</b> | Rank: <b id="dashRank">-</b></p>
-    <div class="grid" style="margin-top:12px">
-      <div class="menu-btn" onclick="show('gamePage')">🎯<br>PLAY GAME<br><small>Neon Tap Rush</small></div>
-      <div class="menu-btn" onclick="show('roomPage')">👥<br>ROOMS<br><small>Create / Join</small></div>
-      <div class="menu-btn" onclick="show('friendPage')">💬<br>FRIENDS CHAT<br><small>Online Friends</small></div>
-      <div class="menu-btn" onclick="show('leaderPage')">🏆<br>LEADERBOARD<br><small>Top Scores</small></div>
-      <div class="menu-btn" onclick="show('profilePage')">👤<br>MY PROFILE<br><small>Edit / View</small></div>
-      <div class="menu-btn" style="border-color:#ff2222" onclick="logout()">🚪<br>LOGOUT<br><small>Exit Game</small></div>
-    </div>
+<div class="card">
+  <div class="scores">
+    <div><small>SCORE</small><b id="score" style="color:#ffeb00">0</b></div>
+    <div><small>TIME</small><b id="time" style="color:#ff00aa">10s</b></div>
+    <div><small>BEST</small><b id="best">0</b></div>
   </div>
-  <div class="card"><h3>📢 Live - Online Friends</h3><div id="onlineList"></div></div>
-</div>
 
-<!-- GAME -->
-<div id="gamePage" class="hidden">
-  <div class="card">
-    <h2>⚡ Neon Tap Rush - Click Me Game 2.0</h2>
-    <p>Score: <b id="score" style="color:#ffeb00;font-size:22px">0</b> | Time Left: <b id="time" style="color:#ff00aa">30s</b> | Best: <b id="best">0</b></p>
-    <div id="gameArea"><button id="tapBtn" onclick="tapGame()">TAP ME!</button></div>
-    <button class="btn" onclick="startGame()">▶ START GAME</button>
-    <button class="btn pink" onclick="show('dashPage')">⬅ BACK</button>
-    <p style="font-size:13px;color:#aaa;margin-top:8px">Button prathi click ki vere chota ki jump avuthundhi. 30 sec lo entha ekkuva click chesthavo adhe nee score!</p>
-  </div>
-</div>
+  <div id="bar"><div id="fill"></div></div>
 
-<!-- ROOM -->
-<div id="roomPage" class="hidden">
-  <div class="card">
-    <h2>👥 Create Room & Join Room</h2>
-    <button class="btn" onclick="createRoom()">+ CREATE ROOM</button>
-    <p>Your Room Code: <b id="myRoomCode" style="color:#ffeb00;font-size:22px">---</b> <button onclick="copyCode()">Copy</button></p>
-    <input id="joinCode" placeholder="Enter Friend Room Code (ex: VJ1234)">
-    <button class="btn pink" onclick="joinRoom()">JOIN ROOM</button>
-    <p id="roomStatus" style="color:#00ffcc;margin-top:8px"></p>
-    <h3>Room Chat</h3>
-    <div class="chatbox" id="roomChat"></div>
-    <input id="roomMsg" placeholder="Type message in room...">
-    <button class="btn" onclick="sendRoomMsg()">Send in Room</button>
-    <br><button class="btn red" onclick="show('dashPage')">⬅ BACK</button>
+  <div id="gameArea">
+    <button id="clickBtn" onclick="clickMe(event)">CLICK ME!</button>
   </div>
-</div>
 
-<!-- FRIENDS -->
-<div id="friendPage" class="hidden">
-  <div class="card">
-    <h2>💬 Friends Chat</h2>
-    <input id="friendName" placeholder="Friend Username add chey">
-    <button class="btn" onclick="addFriend()">+ ADD FRIEND</button>
-    <div id="friendList"></div>
-    <h3>Chat</h3>
-    <div class="chatbox" id="friendChat"></div>
-    <input id="friendMsg" placeholder="Message to friend...">
-    <button class="btn pink" onclick="sendFriendMsg()">Send</button>
-    <br><button class="btn red" onclick="show('dashPage')">⬅ BACK</button>
-  </div>
-</div>
-
-<!-- LEADERBOARD -->
-<div id="leaderPage" class="hidden">
-  <div class="card">
-    <h2>🏆 Leaderboard & Top Scores</h2>
-    <table><thead><tr><th>Rank</th><th>Player</th><th>Score</th></tr></thead><tbody id="leaderBody"></tbody></table>
-    <br><button class="btn" onclick="show('dashPage')">⬅ BACK</button>
-  </div>
-</div>
-
-<!-- PROFILE -->
-<div id="profilePage" class="hidden">
-  <div class="card" style="text-align:center">
-    <div class="profile-pic" id="profilePic">V</div>
-    <h2 id="profileName" style="margin-top:10px">Player</h2>
-    <span class="badge">Level 5 Pro Gamer</span> <span class="badge" style="background:#00ffcc;color:#000">Online</span>
-    <p style="margin-top:10px">Best Score: <b id="profileScore">0</b><br>Total Games: <b id="profileGames">0</b><br>Friends: <b id="profileFriends">0</b></p>
-    <button class="btn" onclick="show('dashPage')">⬅ BACK</button>
-    <button class="btn red" onclick="logout()">LOGOUT</button>
-  </div>
+  <button id="startBtn" onclick="startGame()">▶ START GAME</button>
+  <div id="result"></div>
+  <p style="color:#888;font-size:12px;margin-top:8px">Button prathi click ki vere chota ki jump avuthundhi!</p>
 </div>
 
 <script>
-let users = JSON.parse(localStorage.getItem('vg_users')||'{}');
-let current = localStorage.getItem('vg_current')||'';
-let friends = JSON.parse(localStorage.getItem('vg_friends_'+current)||'[]');
-let roomChats = JSON.parse(localStorage.getItem('vg_roomchat')||'[]');
-let friendChats = JSON.parse(localStorage.getItem('vg_friendchat')||'[]');
-let myRoom = '';
+let score=0,timeLeft=10,timer=null,playing=false;
+let best=localStorage.getItem('vijay_best')||0;
+document.getElementById('best').innerText=best;
 
-function saveUsers(){localStorage.setItem('vg_users',JSON.stringify(users))}
-function checkPass(p){return p.length>=6 && /\d/.test(p)}
-document.getElementById('regPass').addEventListener('input',e=>{
-  let v=e.target.value;
-  document.getElementById('passMsg').innerText = v==''?'': checkPass(v)?'✅ Strong Password':'⚠️ Min 6 chars + 1 Number kavali';
-});
-function register(){
-  let u=document.getElementById('regName').value.trim(), p=document.getElementById('regPass').value;
-  if(!u||!p) return alert('Username & Password ivvu mama!');
-  if(!checkPass(p)) return alert('Password weak! Min 6 chars + 1 Number');
-  if(users[u]) return alert('Ee username already undhi, Login avvu');
-  users[u]={pass:p,best:0,games:0}; saveUsers(); alert('Register Success! Ippudu Login avvu');
+function startGame(){
+  score=0;timeLeft=10;playing=true;
+  document.getElementById('score').innerText=0;
+  document.getElementById('result').innerText='';
+  document.getElementById('fill').style.width='100%';
+  moveBtn();clearInterval(timer);
+  timer=setInterval(()=>{
+    timeLeft--;
+    document.getElementById('time').innerText=timeLeft+'s';
+    document.getElementById('fill').style.width=(timeLeft*10)+'%';
+    if(timeLeft<=0){
+      clearInterval(timer);playing=false;
+      document.getElementById('result').innerText='Game Over! Nee Score: '+score+' 🎉';
+      if(score>best){best=score;localStorage.setItem('vijay_best',best);document.getElementById('best').innerText=best;alert('New Best Score mama! 🏆 '+score);}
+    }
+  },1000);
 }
-function login(){
-  let u=document.getElementById('regName').value.trim(), p=document.getElementById('regPass').value;
-  if(users[u] && users[u].pass===p){current=u; localStorage.setItem('vg_current',u); friends=JSON.parse(localStorage.getItem('vg_friends_'+current)||'[]'); loadDash();}
-  else alert('Wrong Username / Password');
+function moveBtn(){
+  let b=document.getElementById('clickBtn');
+  b.style.left=Math.random()*65+'%';
+  b.style.top=Math.random()*65+'%';
 }
-function logout(){localStorage.removeItem('vg_current'); current=''; location.reload();}
-function show(id){
-  ['dashPage','gamePage','roomPage','friendPage','leaderPage','profilePage'].forEach(x=>document.getElementById(x).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  if(id=='leaderPage') renderLeader();
-  if(id=='profilePage') renderProfile();
-  if(id=='friendPage') renderFriends();
-  if(id=='dashPage') loadDash();
-  window.scrollTo(0,0);
+function clickMe(e){
+  if(!playing){alert('Mundhu START GAME kottu mama!');return;}
+  score++;document.getElementById('score').innerText=score;
+  let p=document.createElement('div');p.id='plus';p.innerText='+1';
+  p.style.left=e.clientX+'px';p.style.top=e.clientY+'px';
+  document.body.appendChild(p);setTimeout(()=>p.remove(),600);
+  moveBtn();
 }
-function loadDash(){
-  document.getElementById('authPage').classList.add('hidden');
-  document.getElementById('dashPage').classList.remove('hidden');
-  document.getElementById('topUser').innerText='👤 '+current;
-  document.getElementById('dashName').innerText=current;
-  document.getElementById('dashScore').innerText=users[current]?.best||0;
-  document.getElementById('best').innerText=users[current]?.best||0;
-  // Online friends demo
-  let demo=['arjun_gamer','sai_pro','rocky_99','nani_ff',current];
-  document.getElementById('onlineList').innerHTML=demo.map(n=>`<div class="msg">🟢 <b>${n}</b> <span class="online">Online</span></div>`).join('');
-}
-// GAME
-let score=0,timeLeft=30,timer=null,playing=false;
-function startGame(){score=0;timeLeft=30;playing=true;document.getElementById('score').innerText=0;document.getElementById('time').innerText='30s';moveBtn();clearInterval(timer);timer=setInterval(()=>{timeLeft--;document.getElementById('time').innerText=timeLeft+'s';if(timeLeft<=0){clearInterval(timer);playing=false;alert('Game Over mama! Score: '+score);if(score>(users[current]?.best||0)){users[current].best=score;saveUsers();}users[current].games=(users[current].games||0)+1;saveUsers();loadDash();}},1000);}
-function moveBtn(){let b=document.getElementById('tapBtn');b.style.left=Math.random()*75+'%';b.style.top=Math.random()*70+'%';}
-function tapGame(){if(!playing) return alert('Mundhu START GAME kottu!');score++;document.getElementById('score').innerText=score;moveBtn();}
-// ROOM
-function createRoom(){myRoom='VJ'+Math.floor(1000+Math.random()*9000);document.getElementById('myRoomCode').innerText=myRoom;document.getElementById('roomStatus').innerText='Room Created! Ee code ni friend ki pampu.';}
-function copyCode(){if(!myRoom) return alert('Mundhu Create Room kottu');navigator.clipboard.writeText(myRoom);alert('Copied: '+myRoom);}
-function joinRoom(){let c=document.getElementById('joinCode').value.trim().toUpperCase();if(!c) return alert('Room Code ivvu');myRoom=c;document.getElementById('roomStatus').innerText='Joined Room: '+c+' ✅';document.getElementById('myRoomCode').innerText=c;}
-function sendRoomMsg(){let m=document.getElementById('roomMsg').value.trim();if(!m||!myRoom) return alert('Mundhu Room Create / Join chey');roomChats.push({room:myRoom,user:current,msg:m});localStorage.setItem('vg_roomchat',JSON.stringify(roomChats));document.getElementById('roomMsg').value='';renderRoomChat();}
-function renderRoomChat(){document.getElementById('roomChat').innerHTML=roomChats.filter(c=>c.room===myRoom).map(c=>`<div class="msg"><b>${c.user}:</b> ${c.msg}</div>`).join('')||'<p style="color:#888">No messages yet. Start chat!</p>';}
-// FRIENDS
-function addFriend(){let f=document.getElementById('friendName').value.trim();if(!f) return alert('Friend name ivvu');if(!friends.includes(f)){friends.push(f);localStorage.setItem('vg_friends_'+current,JSON.stringify(friends));}renderFriends();}
-function renderFriends(){document.getElementById('friendList').innerHTML=friends.length?friends.map(f=>`<div class="msg">🟢 <b>${f}</b> Online - <button onclick="alert('Chat with ${f} started! Kindha message pampu')">Chat</button></div>`).join(''):'<p style="color:#888">No friends yet. Add chey!</p>';document.getElementById('friendChat').innerHTML=friendChats.map(c=>`<div class="msg"><b>${c.user}:</b> ${c.msg}</div>`).join('');}
-function sendFriendMsg(){let m=document.getElementById('friendMsg').value.trim();if(!m) return;friendChats.push({user:current,msg:m});localStorage.setItem('vg_friendchat',JSON.stringify(friendChats));document.getElementById('friendMsg').value='';renderFriends();}
-// LEADERBOARD & PROFILE
-function renderLeader(){let arr=Object.keys(users).map(u=>({name:u,score:users[u].best||0})).sort((a,b)=>b.score-a.score);if(!arr.length) arr=[{name:'Demo Player',score:150}];document.getElementById('leaderBody').innerHTML=arr.map((p,i)=>`<tr><td>${i+1} ${i==0?'🥇':i==1?'🥈':i==2?'🥉':''}</td><td>${p.name}</td><td>${p.score}</td></tr>`).join('');}
-function renderProfile(){document.getElementById('profileName').innerText=current;document.getElementById('profilePic').innerText=current.charAt(0).toUpperCase();document.getElementById('profileScore').innerText=users[current]?.best||0;document.getElementById('profileGames').innerText=users[current]?.games||0;document.getElementById('profileFriends').innerText=friends.length;}
-if(current && users[current]) loadDash();
-setInterval(()=>{if(myRoom) renderRoomChat();},2000);
 </script>
 </body>
-</html>    
+</html>
