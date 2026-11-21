@@ -4,7 +4,8 @@
 <style>
 body{background:#0f0f0f;color:white;font-family:Arial;padding:10px}
 .card{background:#1e1e1e;padding:15px;border-radius:12px;margin:10px 0}
-button{padding:12px 18px;border:none;border-radius:10px;background:#ff6600;color:white;font-weight:bold;margin:5px;width:100%}
+button{padding:12px;border:none;border-radius:10px;background:#ff6600;color:white;font-weight:bold;margin:5px;width:100%}
+.btn-green{background:#00c853}.btn-blue{background:#2962ff}
 input{padding:12px;width:92%;border-radius:10px;border:none;margin:5px 0;background:#333;color:white}
 .hidden{display:none}
 @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.4) rotate(5deg)}}
@@ -13,19 +14,24 @@ input{padding:12px;width:92%;border-radius:10px;border:none;margin:5px 0;backgro
 .meme-big{animation:bounce .5s ease}.meme-shake{animation:shake .5s ease}.meme-blast{animation:blast .6s ease}
 </style></head><body>
 <h2 style="text-align:center">🔥 VIJAY GAME 🔥</h2>
+
 <div id="authScreen" class="card">
-<h3>Login / Register</h3>
+<h3>Welcome Mama!</h3>
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login / Register</button>
-<p id="authMsg"></p></div>
+<button class="btn-green" onclick="doRegister()">📝 REGISTER - Kotha User</button>
+<button class="btn-blue" onclick="doLogin()">🔐 LOGIN - Old User</button>
+<p id="authMsg" style="color:#ffcc00;text-align:center;font-weight:bold"></p>
+<p style="text-align:center;color:#aaa;font-size:12px">Kotha vaadivi aythe REGISTER kottu<br>Old vaadivi aythe LOGIN kottu</p>
+</div>
 
 <div id="mainScreen" class="hidden">
-<div class="card"><h3>Hi <span id="myName"></span>! Best: <span id="myBest">0</span></h3>
+<div class="card"><h3>Hi <span id="myName"></span>! 🔥 Best: <span id="myBest">0</span></h3>
 <button onclick="showGame()">🎮 Click Game</button>
 <button onclick="showRooms()">🏠 Rooms</button>
 <button onclick="showChat()">💬 Chat</button>
-<button onclick="showBoard()">🏆 Leaderboard</button></div>
+<button onclick="showBoard()">🏆 Leaderboard</button>
+<button onclick="logout()" style="background:#666">Logout</button></div>
 
 <div id="gameScreen" class="card hidden">
 <h3>Click Game - 10 Sec</h3>
@@ -45,35 +51,51 @@ input{padding:12px;width:92%;border-radius:10px;border:none;margin:5px 0;backgro
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-// NEE FIREBASE CONFIG IKKADA - Nee old file lo unna config idhe unte marchaku
 var firebaseConfig={apiKey:"AIzaSyB-EXAMPLE",authDomain:"vijiraiya-game-art.firebaseapp.com",databaseURL:"https://vijiraiya-game-art-default-rtdb.firebaseio.com",projectId:"vijiraiya-game-art",storageBucket:"vijiraiya-game-art.appspot.com",messagingSenderId:"123456789",appId:"1:123456789:web:example"};
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
 var currentUser="",myData={best:0,games:0};
 var score=0,timeLeft=10,timer=null,playing=false;
 
-function login(){
-  var u=document.getElementById('username').value.trim();
-  var p=document.getElementById('password').value.trim();
-  if(!u||!p) return alert('Username + Password ivvu mama');
-  currentUser=u;
-  db.ref('users/'+u).once('value',s=>{
-    if(!s.exists()){ db.ref('users/'+u).set({username:u,password:p,best:0,games:0}); myData={best:0,games:0}; }
-    else{ myData=s.val(); if(myData.password!==p) return alert('Wrong password mama!'); }
+function getUP(){ return {u:document.getElementById('username').value.trim(), p:document.getElementById('password').value.trim()} }
+function msg(t){ document.getElementById('authMsg').innerText=t; }
+
+// REGISTER - Kotha user kosam
+function doRegister(){
+  var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!');
+  db.ref('users/'+d.u).once('value',s=>{
+    if(s.exists()){ msg('⚠️ Ee username already undhi mama! LOGIN kottu, leda vere peru pettu!'); }
+    else{
+      db.ref('users/'+d.u).set({username:d.u,password:d.p,best:0,games:0});
+      msg('✅ Register ayipoyindhi mama! Ippudu LOGIN kottu!');
+      document.getElementById('password').value='';
+    }
+  });
+}
+
+// LOGIN - Old user kosam
+function doLogin(){
+  var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!');
+  db.ref('users/'+d.u).once('value',s=>{
+    if(!s.exists()){ msg('❌ Ee username ledhu mama! Mundhu REGISTER kottu!'); return; }
+    var data=s.val();
+    if(data.password!==d.p){ msg('❌ Wrong Password mama! Correct password kottu!'); return; }
+    // LOGIN SUCCESS
+    currentUser=d.u; myData=data;
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('mainScreen').classList.remove('hidden');
-    document.getElementById('myName').innerText=u;
+    document.getElementById('myName').innerText=d.u;
     document.getElementById('myBest').innerText=myData.best||0;
     document.getElementById('best').innerText=myData.best||0;
     loadChat(); loadRooms(); loadBoard();
   });
 }
+function logout(){ location.reload(); }
 function hideAll(){['gameScreen','roomsScreen','chatScreen','boardScreen'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
 function showGame(){hideAll();document.getElementById('gameScreen').classList.remove('hidden')}
 function showRooms(){hideAll();document.getElementById('roomsScreen').classList.remove('hidden')}
 function showChat(){hideAll();document.getElementById('chatScreen').classList.remove('hidden')}
 function showBoard(){hideAll();document.getElementById('boardScreen').classList.remove('hidden')}
-
 function showMeme(emoji,text,comment,anim){
   var box=document.getElementById('memeBox'); box.innerText=emoji; box.className=''; void box.offsetWidth; box.classList.add(anim);
   document.getElementById('memeText').innerText=text;
