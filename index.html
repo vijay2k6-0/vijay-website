@@ -22,6 +22,7 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 .modeBtn{width:90%;padding:18px;font-size:18px;margin:8px}
 .playerRow{display:flex;justify-content:space-between;padding:8px 10px;background:#f9f9f9;margin:4px 0;border-radius:8px;font-size:15px}
 .sepBox{border-top:1px dashed #ddd;margin:12px 0;padding-top:10px}
+.bigScore{font-size:32px !important;background:#fff3e0;padding:15px;border-radius:12px}
 </style></head><body>
 
 <h3 style="text-align:center">Time pass Game</h3>
@@ -61,31 +62,26 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <button class="btn-grey" onclick="logout()">Logout</button>
 </div>
 
-<!-- SINGLE - Buttons Separate Separate -->
 <div id="gameCard" class="card hidden">
+<div id="soloHideWrap">
 <h2>Click the Button Game</h2>
 <div id="memeBox" style="font-size:80px;height:90px">😎</div>
 <div id="memeText" style="color:#ff6600;font-weight:900;font-size:22px;min-height:28px">Ready ah?</div>
 <div id="commentBox" style="color:#00bfa5;font-weight:bold;min-height:22px">Click kottu mama!</div>
-<p><b>Score: <span id="score">0</span></b></p>
-<p><b>Time Left: <span id="time">10s</span></b></p>
-<p><b>Best Score: <span id="best" style="color:#ff6600">0</span></b></p>
-
-<!-- 1. START BUTTON - Separate Box -->
+<p id="soloTimeRow"><b>Time Left: <span id="time">10s</span></b></p>
+<p id="soloBestRow"><b>Best Score: <span id="best" style="color:#ff6600">0</span></b></p>
+</div>
+<p id="soloScoreRow"><b>Score: <span id="score">0</span></b></p>
 <div id="gameMenu" class="sepBox">
 <button id="startBtn" onclick="startGame()">▶️ Start Game</button>
 </div>
-
-<!-- 2. CLICK ME - Separate Box + Blink -->
 <div id="clickArea" class="hidden sepBox">
 <button id="clickBtn" onclick="clickMe()" style="padding:25px 45px;font-size:24px">Click Me! 👆</button>
 </div>
-
-<!-- 3. PLAY AGAIN - Separate Box - Start tho kalisi raadu! -->
 <div id="playAgainBox" class="hidden sepBox">
-<button class="btn-gold" onclick="startGame()" id="playAgainBtn" style="padding:15px 25px;font-size:18px">🔄 Play Again!</button>
+<button onclick="startGame()" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
+<button class="btn-gold" onclick="startGame()" id="playAgainBtn" style="padding:15px 20px;font-size:17px">🔄 Play Again!</button>
 </div>
-
 <p id="result" style="color:green;font-weight:bold;font-size:18px"></p>
 <div id="afterGameMenu" class="sepBox">
 <button class="btn-grey" onclick="showDashboard()">⬅️ Dashboard</button>
@@ -93,43 +89,49 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 </div>
 </div>
 
-<!-- MULTI - Buttons Separate Separate -->
+<!-- MULTI - Room Create kuda Alane - Stage by Stage -->
 <div id="multiCard" class="card hidden">
 <h2>⚔️ Multiplayer Battle - Max 6</h2>
+
+<!-- STAGE 1 - Room Create Matrame -->
+<div id="roomCreateWrap">
 <p>Friend tho same Room peru pettu! Max 6 Players!</p>
 <input id="multiRoomName" placeholder="Room peru - ex: vijay-vs-friend"><br>
 <button onclick="createMultiRoom()">Create Room</button>
 <button class="btn-blue" onclick="joinMultiRoom()">Join Room</button>
-<p>Room: <b id="multiRoom" style="color:#ff6600">None</b> | <span id="roomCount" style="font-size:13px;color:#666">0 / 6 Players</span></p>
-<div style="background:#fff3e0;padding:10px;border-radius:10px;text-align:left">
-<b>👥 Room Players (Max 6):</b>
-<div id="playersList"><div style="color:#888;font-size:13px">Evaru leru - Join avvu mama!</div></div>
+<p style="font-size:13px;color:#888">Room peru petti Create / Join kottu mama!</p>
 </div>
+
+<!-- STAGE 2 - Room Join ayinagane idi kanipisthundhi -->
+<div id="multiAfterJoinWrap" class="hidden">
+<p>Room: <b id="multiRoom" style="color:#ff6600">None</b> | <span id="roomCount" style="font-size:13px;color:#666">0 / 6 Players</span></p>
 <p style="margin:8px 0"><b>Time: <span id="multiTimer">10s</span></b> | <span id="multiStatus">Waiting...</span></p>
 <div id="multiMeme" style="font-size:70px">⚔️</div>
 <div id="multiText" style="color:#ff6600;font-weight:900">Friend ni raammanu!</div><br>
 <div class="chatBox" id="chatBox"></div>
 <input id="chatInput" placeholder="Friend ki msg..." style="width:65%">
-<button class="btn-blue" onclick="sendChat()" style="padding:10px">Send</button><br>
+<button class="btn-blue" onclick="sendChat()" style="padding:10px" id="chatSendBtn">Send</button><br>
+</div>
 
-<!-- 1. START BATTLE - Separate Box -->
-<div id="multiMenu" class="sepBox">
+<!-- PLAYERS SCORE - Room Join ayinagane + Game Start lo kuda idi matrame -->
+<div id="multiScoreWrap" class="hidden" style="background:#fff3e0;padding:10px;border-radius:10px;text-align:left">
+<b>👥 Players Score:</b>
+<div id="playersList"><div style="color:#888;font-size:13px">Evaru leru - Join avvu mama!</div></div>
+</div>
+
+<div id="multiMenu" class="hidden sepBox">
 <button class="btn-red" onclick="startMultiGame()" style="padding:15px 25px;font-size:18px">▶️ START BATTLE!</button><br>
 <p style="font-size:12px;color:#888">Min 2 Players Ready ayithe Game Start avuthundhi</p>
 </div>
-
-<!-- 2. CLICK ME - Separate Box + Blink -->
 <div id="multiClickArea" class="hidden sepBox">
 <button id="multiClickBtn" onclick="clickMulti()" style="padding:22px 35px;font-size:22px">CLICK ME! 👆</button>
 </div>
-
-<!-- 3. REMATCH - Separate Box - START tho kalisi raadu! -->
 <div id="rematchBox" class="hidden sepBox">
-<button class="btn-gold" onclick="rematch()" id="rematchBtn" style="padding:15px 25px;font-size:18px">🔄 Rematch!</button>
+<button onclick="startMultiGame()" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
+<button class="btn-gold" onclick="rematch()" id="rematchBtn" style="padding:15px 20px;font-size:17px">🔄 Rematch!</button>
 </div>
-
 <p id="multiResult" style="color:green;font-weight:bold;font-size:18px"></p>
-<div class="sepBox">
+<div id="multiAfterMenu" class="sepBox">
 <button class="btn-grey" onclick="showDashboard()">⬅️ Dashboard Ki Vellu</button>
 </div>
 </div>
@@ -176,6 +178,8 @@ function showSolo(){ hideAll(); document.getElementById('gameCard').classList.re
 function showMulti(){ hideAll(); document.getElementById('multiCard').classList.remove('hidden'); document.getElementById('multiText').innerText='Friend ni raammanu!'; resetMultiUI(); }
 function showBoard(){ hideAll(); document.getElementById('boardCard').classList.remove('hidden'); }
 function resetSoloUI(){
+  document.getElementById('soloHideWrap').classList.remove('hidden');
+  document.getElementById('soloScoreRow').classList.remove('bigScore');
   document.getElementById('gameMenu').classList.remove('hidden');
   document.getElementById('clickArea').classList.add('hidden');
   document.getElementById('playAgainBox').classList.add('hidden');
@@ -185,10 +189,16 @@ function resetSoloUI(){
   showMeme('😎','Ready ah?','Click kottu mama!','meme-big');
 }
 function resetMultiUI(){
-  document.getElementById('multiMenu').classList.remove('hidden');
+  // MULTI START - Room Create matrame! Migathadhi antha HIDE!
+  document.getElementById('roomCreateWrap').classList.remove('hidden');
+  document.getElementById('multiAfterJoinWrap').classList.add('hidden');
+  document.getElementById('multiScoreWrap').classList.add('hidden');
+  document.getElementById('multiAfterMenu').classList.remove('hidden');
+  document.getElementById('multiMenu').classList.add('hidden');
   document.getElementById('multiClickArea').classList.add('hidden');
   document.getElementById('rematchBox').classList.add('hidden');
   document.getElementById('multiClickBtn').classList.remove('blinkBtn');
+  document.getElementById('multiResult').innerText='';
 }
 function forgotPassword(){ var u=prompt("Nee Username enti mama?"); if(!u) return; db.ref('users/'+u).once('value', s=>{ if(!s.exists()){ alert("❌ Ee username ledhu mama! REGISTER chesuko!"); return; } var np=prompt("Kotha Password enti mama? - "+u+" kosam"); if(!np) return; db.ref('users/'+u).update({password: np}); alert("✅ Password maripoyindhi mama! Ippudu kotha password tho LOGIN kottu!"); }); }
 function logout(){ localStorage.removeItem('mamaUser'); location.reload(); }
@@ -217,7 +227,8 @@ function showMeme(e,t,c,a){ var box=document.getElementById('memeBox'); box.inne
 function startGame(){
   score=0;timeLeft=10;playing=true;
   document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText='';
-  // SEPARATE: Start hide, Play Again hide, Click Me matrame + BLINK
+  document.getElementById('soloHideWrap').classList.add('hidden');
+  document.getElementById('soloScoreRow').classList.add('bigScore');
   document.getElementById('gameMenu').classList.add('hidden');
   document.getElementById('playAgainBox').classList.add('hidden');
   document.getElementById('afterGameMenu').classList.add('hidden');
@@ -230,7 +241,8 @@ function startGame(){
       clearInterval(timer); playing=false;
       document.getElementById('clickArea').classList.add('hidden');
       document.getElementById('clickBtn').classList.remove('blinkBtn');
-      // SEPARATE: Game End - Start kanipinchadhu! Play Again matrame!
+      document.getElementById('soloHideWrap').classList.remove('hidden');
+      document.getElementById('soloScoreRow').classList.remove('bigScore');
       document.getElementById('gameMenu').classList.add('hidden');
       document.getElementById('playAgainBox').classList.remove('hidden');
       document.getElementById('afterGameMenu').classList.remove('hidden');
@@ -264,6 +276,11 @@ function joinMultiRoomByName(r){
 }
 function doJoinMulti(r){
   multiRoom=r; document.getElementById('multiRoom').innerText=r;
+  // ROOM JOIN - Room Create HIDE, Players Score + Chat + START CHUPINCHU
+  document.getElementById('roomCreateWrap').classList.add('hidden');
+  document.getElementById('multiAfterJoinWrap').classList.remove('hidden');
+  document.getElementById('multiScoreWrap').classList.remove('hidden');
+  document.getElementById('multiMenu').classList.remove('hidden');
   db.ref('multi/'+r+'/players/'+currentUser).set({username:currentUser,score:0,ready:false});
   db.ref('multi/'+r+'/players/'+currentUser).onDisconnect().remove();
   db.ref('multi/'+r+'/players').on('value',s=>{
@@ -284,6 +301,8 @@ function startMultiGame(){
   db.ref('multi/'+multiRoom+'/players/'+currentUser).update({ready:true, score:0});
   document.getElementById('multiText').innerText='Nuvvu READY! Friends kosam waiting... ⌛';
   document.getElementById('multiResult').innerText='⌛ Waiting for Friends... Min 2 Ready kavali!';
+  document.getElementById('rematchBox').classList.add('hidden');
+  document.getElementById('multiMenu').classList.remove('hidden');
   setTimeout(checkBothReady, 600);
 }
 function checkBothReady(){
@@ -298,8 +317,10 @@ function checkBothReady(){
 }
 function rematch(){
   if(!multiRoom) return;
-  // SEPARATE: Rematch kottagane - Rematch hide, START matrame vastundhi! Start AVVADHU!
   document.getElementById('rematchBox').classList.add('hidden');
+  document.getElementById('multiAfterJoinWrap').classList.remove('hidden');
+  document.getElementById('multiScoreWrap').classList.remove('hidden');
+  document.getElementById('multiAfterMenu').classList.remove('hidden');
   document.getElementById('multiMenu').classList.remove('hidden');
   document.getElementById('multiClickArea').classList.add('hidden');
   document.getElementById('multiClickBtn').classList.remove('blinkBtn');
@@ -310,7 +331,9 @@ function rematch(){
 }
 function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=true;
   document.getElementById('multiResult').innerText='';
-  // SEPARATE: START hide, REMATCH hide, CLICK ME matrame + BLINK
+  // MULTI GAME START - Migathadhi HIDE, Players Score matrame + CLICK ME
+  document.getElementById('multiAfterJoinWrap').classList.add('hidden');
+  document.getElementById('multiAfterMenu').classList.add('hidden');
   document.getElementById('multiMenu').classList.add('hidden');
   document.getElementById('rematchBox').classList.add('hidden');
   document.getElementById('multiClickArea').classList.remove('hidden');
@@ -324,7 +347,9 @@ function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=tr
       clearInterval(mTimer); mPlaying=false;
       document.getElementById('multiClickArea').classList.add('hidden');
       document.getElementById('multiClickBtn').classList.remove('blinkBtn');
-      // SEPARATE: Game End - START kanipinchadhu! REMATCH matrame!
+      // MULTI GAME END - Malli Anni Chupinchu
+      document.getElementById('multiAfterJoinWrap').classList.remove('hidden');
+      document.getElementById('multiAfterMenu').classList.remove('hidden');
       document.getElementById('multiMenu').classList.add('hidden');
       document.getElementById('rematchBox').classList.remove('hidden');
       var myFinal=mScore;
