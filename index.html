@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<base target="_self">
 <title>Time pass Game</title>
 <style>
 body{background:#f2f2f2;font-family:Arial;padding:15px;margin:0}
@@ -24,15 +25,15 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 .bigScore{font-size:32px !important;background:#fff3e0;padding:15px;border-radius:12px}
 </style></head><body>
 
-<h3 style="text-align:center">Time pass Game</h3>
+<h3 style="text-align:center">Time pass Game - Same Tab Only!</h3>
 
 <div id="authScreen" class="card">
 <h2>Welcome Mama!</h2>
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password"><br>
-<button type="button" onclick="doRegister()">Register</button>
-<button type="button" class="btn-blue" onclick="doLogin()">Login</button>
-<button type="button" class="btn-grey" onclick="forgotPassword()" style="background:#ff9800">Forgot Password? 🤔</button> 
+<button type="button" onclick="doRegister();return false;">Register</button>
+<button type="button" class="btn-blue" onclick="doLogin();return false;">Login</button>
+<button type="button" class="btn-grey" onclick="forgotPassword();return false;" style="background:#ff9800">Forgot Password? 🤔</button> 
 <p id="authMsg" style="color:#ff6600;font-weight:bold"></p>
 </div>
 
@@ -45,8 +46,8 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <p>🏆 <b>Best Score:</b> <span id="pBest" style="color:#ff6600">0</span></p>
 </div>
 <p id="profileMeme" style="color:#ff6600;font-weight:900;font-size:18px">Ready ah mama?</p>
-<button type="button" class="btn-blue" onclick="showDashboard()" style="width:90%;padding:15px;font-size:18px">🎮 Dashboard Ki Vellu ➡️</button><br>
-<button type="button" class="btn-grey" onclick="logout()">Logout</button>
+<button type="button" class="btn-blue" onclick="showDashboard();return false;" style="width:90%;padding:15px;font-size:18px">🎮 Dashboard Ki Vellu ➡️</button><br>
+<button type="button" class="btn-grey" onclick="logout();return false;">Logout</button>
 </div>
 
 <div id="dashboardScreen" class="card hidden">
@@ -54,14 +55,14 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <p>Hi <b id="dashName">Mama</b>! Emi aadudham?</p>
 <div id="dashMeme" style="font-size:60px">😎</div>
 <p id="dashText" style="color:#ff6600;font-weight:bold">Mode select chey mama!</p>
-<button type="button" class="btn-blue modeBtn" onclick="showSolo()">🎯 Single Game<br><span style="font-size:13px">Nuvve Single ga Aadu - Same Tab lone!</span></button><br>
-<button type="button" class="btn-orange modeBtn" onclick="showMulti()">⚔️ Multiplayer<br><span style="font-size:13px">Max 6 Players Tho Aadu</span></button><br>
-<button type="button" class="btn-gold modeBtn" onclick="showBoard()">🏆 Top Score<br><span style="font-size:13px">Top 3 Players Chudu</span></button><br>
-<button type="button" class="btn-purple modeBtn" onclick="showProfile()">👤 My Profile<br><span style="font-size:13px">Nee Profile Chudu</span></button><br>
-<button type="button" class="btn-grey" onclick="logout()">Logout</button>
+<button type="button" class="btn-blue modeBtn" onclick="showSolo();return false;">🎯 Single Game<br><span style="font-size:13px">Same Tab lone! New Tab vadhu!</span></button><br>
+<button type="button" class="btn-orange modeBtn" onclick="showMulti();return false;">⚔️ Multiplayer<br><span style="font-size:13px">Max 6 Players Tho Aadu</span></button><br>
+<button type="button" class="btn-gold modeBtn" onclick="showBoard();return false;">🏆 Top Score<br><span style="font-size:13px">Top 3 Players Chudu</span></button><br>
+<button type="button" class="btn-purple modeBtn" onclick="showProfile();return false;">👤 My Profile<br><span style="font-size:13px">Nee Profile Chudu</span></button><br>
+<button type="button" class="btn-grey" onclick="logout();return false;">Logout</button>
 </div>
 
-<!-- SINGLE - NEW TAB VADHU - SAME TAB LONE! -->
+<!-- SINGLE - SAME TAB LONE! NEW TAB BLOCK! -->
 <div id="gameCard" class="card hidden">
 <div id="soloHideWrap">
 <h2>Click the Button Game</h2>
@@ -73,19 +74,19 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 </div>
 <p id="soloScoreRow"><b>Score: <span id="score">0</span></b></p>
 <div id="gameMenu" class="sepBox">
-<button type="button" id="startBtn" onclick="startGame()">▶️ Start Game</button>
+<button type="button" id="startBtn" onclick="startGame();return false;">▶️ Start Game</button>
 </div>
 <div id="clickArea" class="hidden sepBox">
-<button type="button" id="clickBtn" onclick="clickMe()" style="padding:25px 45px;font-size:24px">Click Me! 👆</button>
+<button type="button" id="clickBtn" onclick="clickMe();return false;" style="padding:25px 45px;font-size:24px">Click Me! 👆</button>
 </div>
 <div id="playAgainBox" class="hidden sepBox">
-<button type="button" onclick="startGame()" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
-<button type="button" class="btn-gold" onclick="startGame()" id="playAgainBtn" style="padding:15px 20px;font-size:17px">🔄 Play Again! - Same Tab lone!</button>
+<button type="button" onclick="startGame();return false;" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
+<button type="button" class="btn-gold" onclick="startGame();return false;" id="playAgainBtn" style="padding:15px 20px;font-size:17px">🔄 Play Again! - Same Tab!</button>
 </div>
 <p id="result" style="color:green;font-weight:bold;font-size:18px"></p>
 <div id="afterGameMenu" class="sepBox">
-<button type="button" class="btn-grey" onclick="showDashboard()">⬅️ Dashboard</button>
-<button type="button" class="btn-grey" onclick="logout()">Logout</button>
+<button type="button" class="btn-grey" onclick="showDashboard();return false;">⬅️ Dashboard</button>
+<button type="button" class="btn-grey" onclick="logout();return false;">Logout</button>
 </div>
 </div>
 
@@ -95,8 +96,8 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <div id="roomCreateWrap">
 <p>Friend tho same Room peru pettu! Max 6 Players!</p>
 <input id="multiRoomName" placeholder="Room peru - ex: vijay-vs-friend"><br>
-<button type="button" onclick="createMultiRoom()">Create Room</button>
-<button type="button" class="btn-blue" onclick="joinMultiRoom()">Join Room</button>
+<button type="button" onclick="createMultiRoom();return false;">Create Room</button>
+<button type="button" class="btn-blue" onclick="joinMultiRoom();return false;">Join Room</button>
 <p style="font-size:13px;color:#888">Room peru petti Create / Join kottu mama!</p>
 </div>
 <div id="multiAfterJoinWrap" class="hidden">
@@ -104,7 +105,7 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <p style="margin:8px 0"><b>Time: <span id="multiTimer">10s</span></b> | <span id="multiStatus">Waiting...</span></p>
 <div class="chatBox" id="chatBox"></div>
 <input id="chatInput" placeholder="Friend ki msg..." style="width:65%">
-<button type="button" class="btn-blue" onclick="sendChat()" style="padding:10px" id="chatSendBtn">Send</button><br>
+<button type="button" class="btn-blue" onclick="sendChat();return false;" style="padding:10px" id="chatSendBtn">Send</button><br>
 </div>
 <div id="multiEmojiWrap" class="hidden" style="margin:10px 0">
 <div id="multiMeme" style="font-size:80px;height:90px">⚔️</div>
@@ -116,31 +117,37 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <div id="playersList"><div style="color:#888;font-size:13px">Evaru leru - Join avvu mama!</div></div>
 </div>
 <div id="multiMenu" class="hidden sepBox">
-<button type="button" class="btn-red" onclick="startMultiGame()" style="padding:15px 25px;font-size:18px">▶️ START BATTLE!</button><br>
+<button type="button" class="btn-red" onclick="startMultiGame();return false;" style="padding:15px 25px;font-size:18px">▶️ START BATTLE!</button><br>
 <p style="font-size:12px;color:#888">Min 2 Players Ready ayithe Game Start avuthundhi</p>
 </div>
 <div id="multiClickArea" class="hidden sepBox">
-<button type="button" id="multiClickBtn" onclick="clickMulti()" style="padding:22px 35px;font-size:22px">CLICK ME! 👆</button>
+<button type="button" id="multiClickBtn" onclick="clickMulti();return false;" style="padding:22px 35px;font-size:22px">CLICK ME! 👆</button>
 </div>
 <div id="rematchBox" class="hidden sepBox">
-<button type="button" onclick="startMultiGame()" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
-<button type="button" class="btn-gold" onclick="rematch()" id="rematchBtn" style="padding:15px 20px;font-size:17px">🔄 Rematch!</button>
+<button type="button" onclick="startMultiGame();return false;" style="padding:15px 20px;font-size:17px">👆 CLICK ME!</button>
+<button type="button" class="btn-gold" onclick="rematch();return false;" id="rematchBtn" style="padding:15px 20px;font-size:17px">🔄 Rematch!</button>
 </div>
 <p id="multiResult" style="color:green;font-weight:bold;font-size:18px"></p>
 <div id="multiAfterMenu" class="sepBox">
-<button type="button" class="btn-grey" onclick="showDashboard()">⬅️ Dashboard Ki Vellu</button>
+<button type="button" class="btn-grey" onclick="showDashboard();return false;">⬅️ Dashboard Ki Vellu</button>
 </div>
 </div>
 
 <div id="boardCard" class="card hidden">
 <h2>🏆 Top 3 Players</h2>
 <div id="boardList" style="text-align:left"></div><br>
-<button type="button" class="btn-grey" onclick="showDashboard()">⬅️ Dashboard</button>
+<button type="button" class="btn-grey" onclick="showDashboard();return false;">⬅️ Dashboard</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
+// NEW TAB 100% BLOCK - Ee code lo eppudu New Tab open avvadu!
+window.open = function(){ console.log("New Tab Blocked! Same Tab lone!"); return null; };
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a');
+  if(a){ e.preventDefault(); var href=a.getAttribute('href'); if(href && href!=='#') window.location.href=href; }
+}, true);
 var firebaseConfig={apiKey:"AIzaSyB-EXAMPLE",authDomain:"vijiraiya-game-art.firebaseapp.com",databaseURL:"https://vijiraiya-game-art-default-rtdb.firebaseio.com",projectId:"vijiraiya-game-art",storageBucket:"vijiraiya-game-art.appspot.com",messagingSenderId:"123456789",appId:"1:123456789:web:example"};
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
@@ -222,7 +229,6 @@ function getEmojiByScore(s){
 function showMeme(e,t,c,a){ var box=document.getElementById('memeBox'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('memeText').innerText=t; document.getElementById('commentBox').innerText=c; }
 function showMultiMeme(e,t,c,a){ var box=document.getElementById('multiMeme'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('multiText').innerText=t; document.getElementById('multiComment').innerText=c; }
 function startGame(){
-  // SAME TAB LONE - KOTTA TAB OPEN AVVADHU!
   score=0;timeLeft=10;playing=true;
   document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText='';
   document.getElementById('soloHideWrap').classList.add('hidden');
