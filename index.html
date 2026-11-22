@@ -7,7 +7,7 @@ body{background:#f2f2f2;font-family:Arial;padding:15px;margin:0}
 h2{color:#333}
 button{background:#4CAF50;color:white;border:none;padding:12px 20px;border-radius:6px;font-size:16px;margin:5px;cursor:pointer}
 button:hover{background:#45a049}
-.btn-blue{background:#2196F3}.btn-orange{background:#ff6600}.btn-red{background:#f44336}.btn-grey{background:#888}.btn-gold{background:#FFC107;color:#333}
+.btn-blue{background:#2196F3}.btn-orange{background:#ff6600}.btn-red{background:#f44336}.btn-grey{background:#888}.btn-gold{background:#FFC107;color:#333}.btn-purple{background:#9C27B0}
 input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;font-size:15px}
 .hidden{display:none}
 @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.4) rotate(5deg)}}
@@ -16,10 +16,13 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 .meme-big{animation:bounce .5s ease}.meme-shake{animation:shake .5s ease}.meme-blast{animation:blast .6s ease}
 .vs{display:flex;gap:10px}.vs div{flex:1;background:#f9f9f9;padding:10px;border-radius:8px}
 .chatBox{background:#f9f9f9;height:80px;overflow-y:auto;text-align:left;padding:8px;border-radius:8px;font-size:13px;margin:8px 0}
+.profileAvatar{font-size:90px}
+.modeBtn{width:90%;padding:18px;font-size:18px;margin:8px}
 </style></head><body>
 
 <h3 style="text-align:center">Time pass Game</h3>
 
+<!-- LOGIN -->
 <div id="authScreen" class="card">
 <h2>Welcome Mama!</h2>
 <input id="username" placeholder="Username">
@@ -30,8 +33,38 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <p id="authMsg" style="color:#ff6600;font-weight:bold"></p>
 </div>
 
-<div id="mainScreen" class="hidden">
-<div class="card" id="gameCard">
+<!-- 1. PROFILE - Login ayinagane idi kanipisthundhi -->
+<div id="profileScreen" class="card hidden">
+<div class="profileAvatar" id="profileAvatar">😎</div>
+<h2 id="profileName">Hi Mama!</h2>
+<p style="color:#888">Nee Profile</p>
+<div style="background:#f9f9f9;padding:15px;border-radius:10px;text-align:left">
+<p>👤 <b>Username:</b> <span id="pUsername">-</span></p>
+<p>🏆 <b>Best Score:</b> <span id="pBest" style="color:#ff6600">0</span></p>
+<p>🎮 <b>Games:</b> <span id="pGames">0</span></p>
+<p>🥇 <b>Wins:</b> <span id="pWins">0</span></p>
+<p>🔥 <b>Rank:</b> <span id="pRank">-</span></p>
+</div>
+<p id="profileMeme" style="color:#ff6600;font-weight:900;font-size:18px">Ready ah mama?</p>
+<button class="btn-blue" onclick="showDashboard()" style="width:90%;padding:15px;font-size:18px">🎮 Dashboard Ki Vellu ➡️</button><br>
+<button class="btn-grey" onclick="logout()">Logout</button>
+</div>
+
+<!-- 2. DASHBOARD - Mods Select cheyali -->
+<div id="dashboardScreen" class="card hidden">
+<h2>🎮 Dashboard</h2>
+<p>Hi <b id="dashName">Mama</b>! Emi aadudham?</p>
+<div id="dashMeme" style="font-size:60px">😎</div>
+<p id="dashText" style="color:#ff6600;font-weight:bold">Mode select chey mama!</p>
+<button class="btn-blue modeBtn" onclick="showSolo()">🎯 Single Game<br><span style="font-size:13px">Nuvve Single ga Aadu</span></button><br>
+<button class="btn-orange modeBtn" onclick="showMulti()">⚔️ Multiplayer<br><span style="font-size:13px">Friend Tho Aadu</span></button><br>
+<button class="btn-gold modeBtn" onclick="showBoard()">🏆 Top Score<br><span style="font-size:13px">Top 3 Players Chudu</span></button><br>
+<button class="btn-purple modeBtn" onclick="showProfile()">👤 My Profile<br><span style="font-size:13px">Nee Profile Chudu</span></button><br>
+<button class="btn-grey" onclick="logout()">Logout</button>
+</div>
+
+<!-- 3. SINGLE GAME -->
+<div id="gameCard" class="card hidden">
 <h2>Click the Button Game</h2>
 <div id="memeBox" style="font-size:80px;height:90px">😎</div>
 <div id="memeText" style="color:#ff6600;font-weight:900;font-size:22px;min-height:28px">Ready ah?</div>
@@ -39,15 +72,24 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <p><b>Score: <span id="score">0</span></b></p>
 <p><b>Time Left: <span id="time">10s</span></b></p>
 <p><b>Best Score: <span id="best" style="color:#ff6600">0</span></b></p>
-<button onclick="clickMe()">Click Me!</button>
-<button onclick="startGame()">Start Game</button>
+<!-- Game Start ayinagane Click Me matrame kanipisthundhi -->
+<div id="gameMenu">
+<button id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+<div id="clickArea" class="hidden">
+<button id="clickBtn" onclick="clickMe()" style="padding:25px 45px;font-size:24px">Click Me! 👆</button>
+</div>
 <p id="result" style="color:green;font-weight:bold;font-size:18px"></p>
+<div id="afterGameMenu">
 <button class="btn-orange" onclick="showMulti()">⚔️ Multiplayer - Friend Tho Aadu</button>
 <button class="btn-blue" onclick="showBoard()">🏆 Top Score Chudu</button><br>
+<button class="btn-grey" onclick="showDashboard()">⬅️ Dashboard</button>
 <button class="btn-grey" onclick="logout()">Logout</button>
 </div>
+</div>
 
-<div class="card hidden" id="multiCard">
+<!-- MULTIPLAYER -->
+<div id="multiCard" class="card hidden">
 <h2>⚔️ Multiplayer Battle</h2>
 <p>Friend tho same Room peru pettu!</p>
 <input id="multiRoomName" placeholder="Room peru - ex: vijay-vs-friend"><br>
@@ -64,18 +106,22 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <div class="chatBox" id="chatBox"></div>
 <input id="chatInput" placeholder="Friend ki msg..." style="width:65%">
 <button class="btn-blue" onclick="sendChat()" style="padding:10px">Send</button><br>
+<div id="multiMenu">
 <button class="btn-red" onclick="startMultiGame()">START BATTLE!</button><br>
+</div>
+<div id="multiClickArea" class="hidden">
 <button onclick="clickMulti()" style="padding:18px 30px;font-size:20px">CLICK ME! 👆</button>
+</div>
 <p id="multiResult" style="color:green;font-weight:bold;font-size:18px"></p>
 <button class="btn-gold" onclick="rematch()" id="rematchBtn" style="display:none">🔄 Rematch!</button><br>
-<button class="btn-grey" onclick="showSolo()">⬅️ Solo Game Ki Vellu</button>
+<button class="btn-grey" onclick="showDashboard()">⬅️ Dashboard Ki Vellu</button>
 </div>
 
-<div class="card hidden" id="boardCard">
+<!-- TOP SCORE -->
+<div id="boardCard" class="card hidden">
 <h2>🏆 Top 3 Players</h2>
 <div id="boardList" style="text-align:left"></div><br>
-<button class="btn-grey" onclick="showSolo()">⬅️ Back</button>
-</div>
+<button class="btn-grey" onclick="showDashboard()">⬅️ Dashboard</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -89,33 +135,83 @@ var score=0,timeLeft=10,timer=null,playing=false;
 var mScore=0,mTime=10,mTimer=null,mPlaying=false;
 function getUP(){return {u:document.getElementById('username').value.trim(),p:document.getElementById('password').value.trim()}}
 function msg(t){document.getElementById('authMsg').innerText=t}
+function hideAll(){ ['authScreen','profileScreen','dashboardScreen','gameCard','multiCard','boardCard'].forEach(id=>document.getElementById(id).classList.add('hidden')); }
 function doRegister(){ var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!'); db.ref('users/'+d.u).once('value',s=>{ if(s.exists()) msg('Already undhi! LOGIN kottu!'); else{ db.ref('users/'+d.u).set({username:d.u,password:d.p,best:0,games:0,wins:0,streak:0,lastBonus:""}); msg('Register ayipoyindhi! Ippudu LOGIN kottu!'); document.getElementById('password').value=''; } }); }
-function doLogin(){ var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!'); db.ref('users/'+d.u).once('value',s=>{ if(!s.exists()){msg('Username ledhu! REGISTER kottu!');return;} var data=s.val(); if(data.password!==d.p){msg('Wrong Password!');return;} currentUser=d.u; myData=data; localStorage.setItem('mamaUser', d.u); document.getElementById('authScreen').classList.add('hidden'); document.getElementById('mainScreen').classList.remove('hidden'); updateProfileUI(); startLive(); showMeme('😎','Ready ah?','Kottu mama!','meme-big'); }); }
-function updateProfileUI(){ var b=document.getElementById('best'); if(b) b.innerText=myData.best||0; }
+function doLogin(){ var d=getUP(); if(!d.u||!d.p) return msg('Username + Password pettu mama!'); db.ref('users/'+d.u).once('value',s=>{ if(!s.exists()){msg('Username ledhu! REGISTER kottu!');return;} var data=s.val(); if(data.password!==d.p){msg('Wrong Password!');return;} currentUser=d.u; myData=data; localStorage.setItem('mamaUser', d.u); showProfile(); startLive(); }); }
+function updateProfileUI(){
+  var b=document.getElementById('best'); if(b) b.innerText=myData.best||0;
+  document.getElementById('pUsername').innerText=currentUser;
+  document.getElementById('pBest').innerText=myData.best||0;
+  document.getElementById('pGames').innerText=myData.games||0;
+  document.getElementById('pWins').innerText=myData.wins||0;
+  document.getElementById('profileName').innerText='Hi '+currentUser+'!';
+  document.getElementById('dashName').innerText=currentUser;
+  // Profile Avatar - Best batti maruthundhi
+  var best=myData.best||0; var av='😎', pm='Ready ah mama?';
+  if(best>=100){ av='👑'; pm='Nuvve King mama! 👑'; }
+  else if(best>=50){ av='🔥'; pm='Mass mama! 50+ kottesav!'; }
+  else if(best>=30){ av='🦁'; pm='Simham mama!'; }
+  else if(best>=10){ av='💪'; pm='Super mama! Inka kottu!'; }
+  document.getElementById('profileAvatar').innerText=av;
+  document.getElementById('profileMeme').innerText=pm;
+  document.getElementById('dashMeme').innerText=av;
+}
+function showProfile(){ hideAll(); updateProfileUI(); document.getElementById('profileScreen').classList.remove('hidden'); }
+function showDashboard(){ hideAll(); updateProfileUI(); document.getElementById('dashboardScreen').classList.remove('hidden'); }
+function showSolo(){ hideAll(); document.getElementById('gameCard').classList.remove('hidden'); resetSoloUI(); }
+function showMulti(){ hideAll(); document.getElementById('multiCard').classList.remove('hidden'); document.getElementById('multiText').innerText='Friend ni raammanu!'; }
+function showBoard(){ hideAll(); document.getElementById('boardCard').classList.remove('hidden'); }
+function resetSoloUI(){
+  document.getElementById('gameMenu').classList.remove('hidden');
+  document.getElementById('clickArea').classList.add('hidden');
+  document.getElementById('afterGameMenu').classList.remove('hidden');
+  document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText='';
+  showMeme('😎','Ready ah?','Click kottu mama!','meme-big');
+}
 function forgotPassword(){ var u=prompt("Nee Username enti mama?"); if(!u) return; db.ref('users/'+u).once('value', s=>{ if(!s.exists()){ alert("❌ Ee username ledhu mama! REGISTER chesuko!"); return; } var np=prompt("Kotha Password enti mama? - "+u+" kosam"); if(!np) return; db.ref('users/'+u).update({password: np}); alert("✅ Password maripoyindhi mama! Ippudu kotha password tho LOGIN kottu!"); }); }
 function logout(){ localStorage.removeItem('mamaUser'); location.reload(); }
-function showSolo(){ document.getElementById('gameCard').classList.remove('hidden'); document.getElementById('multiCard').classList.add('hidden'); document.getElementById('boardCard').classList.add('hidden'); }
-function showMulti(){ document.getElementById('gameCard').classList.add('hidden'); document.getElementById('multiCard').classList.remove('hidden'); document.getElementById('boardCard').classList.add('hidden'); document.getElementById('multiText').innerText='Friend ni raammanu!'; }
-function showBoard(){ document.getElementById('gameCard').classList.add('hidden'); document.getElementById('multiCard').classList.add('hidden'); document.getElementById('boardCard').classList.remove('hidden'); db.ref('users').once('value', s=>{ var arr=[]; s.forEach(c=>{ if(c.val() && c.val().username) arr.push(c.val()); }); arr.sort((a,b)=>(b.best||0)-(a.best||0)); arr=arr.slice(0,3); if(arr.length===0) document.getElementById('boardList').innerHTML='Evaru aada ledhu mama! Mundhu Solo aadu!'; }); }
 function startLive(){
   db.ref('users').on('value',s=>{
     var arr=[]; s.forEach(c=>{ var v=c.val(); if(v && v.username) arr.push(v); });
-    arr.sort((a,b)=>(b.best||0)-(a.best||0)); arr=arr.slice(0,3);
+    arr.sort((a,b)=>(b.best||0)-(a.best||0));
+    // Rank kanipinchali profile lo
+    var myRank=arr.findIndex(u=>u.username===currentUser)+1;
+    document.getElementById('pRank').innerText=myRank>0?'#'+myRank:'-';
+    arr=arr.slice(0,3);
     var h=''; if(arr.length===0){ h='<div style="padding:15px;text-align:center">Evaru aada ledhu! Nuvve first aadu mama! 🔥</div>'; }
     arr.forEach((u,i)=>{ var medal=i==0?'👑':i==1?'🥈':'🥉'; var isMe=u.username===currentUser?' <span style="background:#4CAF50;color:white;padding:2px 6px;border-radius:4px;font-size:11px">YOU</span>':''; h+='<div style="padding:14px;background:'+(i==0?'#fff3e0':i==1?'#f3f3f3':'#fff8e1')+';margin:6px;border-radius:10px;font-size:17px">'+medal+' <b>'+u.username+'</b>'+isMe+' - Best: <b style="color:#ff6600">'+(u.best||0)+'</b></div>'; });
     document.getElementById('boardList').innerHTML=h;
   });
   db.ref('users/'+currentUser).on('value',s=>{ if(s.exists()){ myData=s.val(); updateProfileUI(); } });
 }
+// Emoji - Score batti maruthundhi
+function getEmojiByScore(s){
+  if(s>=50) return {e:'👑',t:'KOTTU KOTTU!!',c:'50!! Aarey mass mama! Aapaku!'};
+  if(s>=40) return {e:'🦁',t:'SIMHAM!!',c:'40! Evaru aapaleru!'};
+  if(s>=30) return {e:'⚡',t:'SPEED!!',c:'30! Inka fast!'};
+  if(s>=20) return {e:'💪',t:'CAMON!!',c:'20 vachesindhi! Aapu mama!'};
+  if(s>=10) return {e:'😲',t:'WOWW!!',c:'10 ayipoyindhi mama! Super!'};
+  if(s>=5) return {e:'😜',t:'Good!',c:'Score: '+s+' - Kottu mama!'};
+  if(s>=1) return {e:'😎',t:'Start!',c:'Score: '+s+' - Kottu mama!'};
+  return {e:'😎',t:'Ready ah?',c:'Kottu mama!'};
+}
 function showMeme(e,t,c,a){ var box=document.getElementById('memeBox'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('memeText').innerText=t; document.getElementById('commentBox').innerText=c; }
 function startGame(){
   score=0;timeLeft=10;playing=true;
   document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText='';
+  // GAME START - Click Me matrame! Migilina anni hide!
+  document.getElementById('gameMenu').classList.add('hidden');
+  document.getElementById('afterGameMenu').classList.add('hidden');
+  document.getElementById('clickArea').classList.remove('hidden');
   showMeme('😎','Ready ah?','Kottu mama!','meme-big'); clearInterval(timer);
   timer=setInterval(()=>{
     timeLeft--; document.getElementById('time').innerText=timeLeft+'s';
     if(timeLeft<=0){
       clearInterval(timer); playing=false;
+      // Game End - Malli anni kanipisthayi
+      document.getElementById('clickArea').classList.add('hidden');
+      document.getElementById('gameMenu').classList.remove('hidden');
+      document.getElementById('afterGameMenu').classList.remove('hidden');
       db.ref('users/'+currentUser).once('value', s=>{
         var oldBest=s.exists()?(s.val().best||0):0; var oldStreak=s.exists()?(s.val().streak||0):0;
         var newBest=Math.max(oldBest,score); var newStreak=(score>oldBest&&score>0)?oldStreak+1:oldStreak;
@@ -127,7 +223,14 @@ function startGame(){
     }
   },1000);
 }
-function clickMe(){ if(!playing) return alert('Mundhu Start Game kottu mama!'); score++; document.getElementById('score').innerText=score; if(score===10) showMeme('😲','WOWW!!','10 ayipoyindhi mama! Super!','meme-big'); else if(score===20) showMeme('💪','CAMON!!','20 vachesindhi! Aapu mama!','meme-big'); else if(score===30) showMeme('⚡','SPEED!!','30! Inka fast!','meme-big'); else if(score===40) showMeme('🦁','SIMHAM!!','40! Evaru aapaleru!','meme-big'); else if(score===50) showMeme('🔥','KOTTU KOTTU!!','50!! Aarey mass mama! Aapaku!','meme-blast'); else{ var n=['😎','😜','🤩','😁']; document.getElementById('memeBox').innerText=n[Math.floor(Math.random()*n.length)]; document.getElementById('commentBox').innerText='Score: '+score+' - Kottu mama!'; } }
+function clickMe(){
+  if(!playing) return alert('Mundhu Start Game kottu mama!');
+  score++; document.getElementById('score').innerText=score;
+  // Score batti Emoji maruthundhi
+  var m=getEmojiByScore(score);
+  var anim=score>=50?'meme-blast':'meme-big';
+  showMeme(m.e,m.t,m.c,anim);
+}
 function createMultiRoom(){ var r=document.getElementById('multiRoomName').value.trim().toLowerCase(); if(!r) return alert('Room peru pettu mama!'); db.ref('multi/'+r).once('value', s=>{ if(s.exists()){ alert('Room already undhi! JOIN kottu mama!'); } else { db.ref('multi/'+r).set({createdBy:currentUser,status:'waiting'}); } joinMultiRoomByName(r); }); }
 function joinMultiRoom(){ var r=document.getElementById('multiRoomName').value.trim().toLowerCase(); if(!r) return alert('Room peru pettu mama!'); joinMultiRoomByName(r); }
 function joinMultiRoomByName(r){
@@ -175,9 +278,14 @@ function rematch(){
   document.getElementById('rematchBtn').style.display='none';
   document.getElementById('multiResult').innerText='Rematch ready! START kottu!';
   document.getElementById('multiText').innerText='Malli aadudham!';
+  document.getElementById('multiMenu').classList.remove('hidden');
+  document.getElementById('multiClickArea').classList.add('hidden');
 }
 function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=true;
   document.getElementById('myMultiScore').innerText=0; document.getElementById('multiResult').innerText=''; document.getElementById('rematchBtn').style.display='none';
+  // Multi lo kuda - Click Me matrame!
+  document.getElementById('multiMenu').classList.add('hidden');
+  document.getElementById('multiClickArea').classList.remove('hidden');
   document.getElementById('multiMeme').innerText='🔥'; document.getElementById('multiText').innerText='IDDARU READY! KOTTU MAMA! 🔥';
   db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:0,ready:false});
   clearInterval(mTimer);
@@ -185,8 +293,10 @@ function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=tr
     mTime--; document.getElementById('multiTimer').innerText=mTime+'s';
     if(mTime<=0){
       clearInterval(mTimer); mPlaying=false;
+      document.getElementById('multiClickArea').classList.add('hidden');
+      document.getElementById('multiMenu').classList.remove('hidden');
       var myFinal=mScore; var oppFinal=parseInt(document.getElementById('oppMultiScore').innerText)||0;
-      db.ref('users/'+currentUser).once('value', ss=>{ var oldBest=ss.exists()?(ss.val().best||0):0; var oldWins=ss.exists()?(ss.val().wins||0):0; var newBest=Math.max(oldBest,myFinal); var isWin=myFinal>oppFinal; db.ref('users/'+currentUser).update({best:newBest,wins:oldWins+(isWin?1:0),games:(myData.games||0)+1}); myData.best=newBest; document.getElementById('best').innerText=newBest; });
+      db.ref('users/'+currentUser).once('value', ss=>{ var oldBest=ss.exists()?(ss.val().best||0):0; var oldWins=ss.exists()?(ss.val().wins||0):0; var newBest=Math.max(oldBest,myFinal); var isWin=myFinal>oppFinal; db.ref('users/'+currentUser).update({best:newBest,wins:oldWins+(isWin?1:0),games:(myData.games||0)+1}); myData.best=newBest; document.getElementById('best').innerText=newBest; updateProfileUI(); });
       if(myFinal>oppFinal){ document.getElementById('multiResult').innerText='🏆 YOU WIN! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='👑'; document.getElementById('multiText').innerText='ABHAA! Nuvve King!'; }
       else if(myFinal<oppFinal){ document.getElementById('multiResult').innerText='😭 YOU LOSE! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='😭'; document.getElementById('multiText').innerText='Friend gelichadu! Malli kottu!'; }
       else{ document.getElementById('multiResult').innerText='🤝 DRAW! '+myFinal+' vs '+oppFinal; document.getElementById('multiMeme').innerText='🤝'; }
@@ -195,17 +305,23 @@ function startMultiLocal(){ if(mPlaying) return; mScore=0; mTime=10; mPlaying=tr
     }
   },1000);
 }
-function clickMulti(){ if(!mPlaying) return alert('Mundhu START BATTLE kottu mama!'); mScore++; document.getElementById('myMultiScore').innerText=mScore; db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:mScore}); if(mScore===20) document.getElementById('multiText').innerText='20! Friend ni odisthunnav!'; if(mScore===50) document.getElementById('multiText').innerText='50!! MASS MAMA!'; }
+function clickMulti(){
+  if(!mPlaying) return alert('Mundhu START BATTLE kottu mama!');
+  mScore++; document.getElementById('myMultiScore').innerText=mScore;
+  db.ref('multi/'+multiRoom+'/players/'+currentUser).update({score:mScore});
+  // Multi lo kuda Emoji Score batti maruthundhi
+  var em='🔥'; if(mScore>=50) em='👑'; else if(mScore>=30) em='🦁'; else if(mScore>=20) em='💪'; else if(mScore>=10) em='😲';
+  document.getElementById('multiMeme').innerText=em;
+  if(mScore===20) document.getElementById('multiText').innerText='20! Friend ni odisthunnav!';
+  if(mScore===50) document.getElementById('multiText').innerText='50!! MASS MAMA!';
+}
 window.onload = function(){
   var savedUser = localStorage.getItem('mamaUser');
   if(savedUser){
     db.ref('users/'+savedUser).once('value', s=>{
       if(s.exists()){
         currentUser = savedUser; myData = s.val();
-        document.getElementById('authScreen').classList.add('hidden');
-        document.getElementById('mainScreen').classList.remove('hidden');
-        updateProfileUI(); startLive();
-        showMeme('😎','Welcome back!','Kottu mama!','meme-big');
+        showProfile(); startLive();
       }
     });
   }
