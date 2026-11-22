@@ -55,13 +55,13 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 <div id="dashMeme" style="font-size:60px">😎</div>
 <p id="dashText" style="color:#ff6600;font-weight:bold">Mode select chey mama!</p>
 <div class="btn btn-blue modeBtn" onclick="showSolo()">🎯 Single Game<br><span style="font-size:13px">First Tab lone Start!</span></div><br>
-<div class="btn btn-orange modeBtn" onclick="showMulti()">⚔️ Multiplayer<br><span style="font-size:13px">Max 6 Players Tho Aadu</span></div><br>
+<div class="btn btn-orange modeBtn" onclick="showMulti()">⚔️ Multiplayer<br><span style="font-size:13px">Idharu Start Chesthe Chalu - Instant Start!</span></div><br>
 <div class="btn btn-gold modeBtn" onclick="showBoard()">🏆 Top Score<br><span style="font-size:13px">Top 3 Players Chudu</span></div><br>
 <div class="btn btn-purple modeBtn" onclick="showProfile()">👤 My Profile<br><span style="font-size:13px">Nee Profile Chudu</span></div><br>
 <div class="btn btn-grey" onclick="logout()">Logout</div>
 </div>
 
-<!-- SINGLE - FIRST TAB LONE GAME! Emi HIDE Avvadu! -->
+<!-- SINGLE - First Tab lone! -->
 <div id="gameCard" class="card hidden">
 <div id="soloHideWrap">
 <h2>Click the Button Game</h2>
@@ -89,7 +89,7 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 </div>
 </div>
 
-<!-- MULTI - First Tab lone! -->
+<!-- MULTI - Idharu Start = Instant Start! Time Vadhu! -->
 <div id="multiCard" class="card hidden">
 <h2>⚔️ Multiplayer Battle - Max 6</h2>
 <div id="roomCreateWrap">
@@ -117,7 +117,7 @@ input{padding:12px;width:85%;border:1px solid #ddd;border-radius:6px;margin:5px;
 </div>
 <div id="multiMenu" class="hidden sepBox">
 <div class="btn btn-red" onclick="startMultiGame()" style="padding:15px 25px;font-size:18px">▶️ START BATTLE!</div><br>
-<p style="font-size:12px;color:#888">Min 2 Players Ready ayithe Game Start avuthundhi</p>
+<p style="font-size:12px;color:#888">Idharu Start Chesthe Chalu - Apude Start! Wait Cheyadu!</p>
 </div>
 <div id="multiClickArea" class="hidden sepBox">
 <div class="btn" id="multiClickBtn" onclick="clickMulti()" style="padding:22px 35px;font-size:22px">CLICK ME! 👆</div>
@@ -224,13 +224,9 @@ function getEmojiByScore(s){
 }
 function showMeme(e,t,c,a){ var box=document.getElementById('memeBox'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('memeText').innerText=t; document.getElementById('commentBox').innerText=c; }
 function showMultiMeme(e,t,c,a){ var box=document.getElementById('multiMeme'); box.innerText=e; box.className=''; void box.offsetWidth; box.classList.add(a); document.getElementById('multiText').innerText=t; document.getElementById('multiComment').innerText=c; }
-// FIRST TAB LONE GAME START - Emi HIDE Avvadu!
 function startGame(){
   score=0;timeLeft=10;playing=true;
   document.getElementById('score').innerText=0; document.getElementById('time').innerText='10s'; document.getElementById('result').innerText='';
-  // Ade Screen lone untundhi - Hide cheyadam ledhu!
-  // document.getElementById('soloHideWrap').classList.add('hidden'); <- THEESESANU!
-  // document.getElementById('afterGameMenu').classList.add('hidden'); <- THEESESANU!
   document.getElementById('soloScoreRow').classList.add('bigScore');
   document.getElementById('gameMenu').classList.add('hidden');
   document.getElementById('playAgainBox').classList.add('hidden');
@@ -243,7 +239,6 @@ function startGame(){
       clearInterval(timer); playing=false;
       document.getElementById('clickArea').classList.add('hidden');
       document.getElementById('clickBtn').classList.remove('blinkBtn');
-      // End ayinagane - Ade Screen lone Two Buttons!
       document.getElementById('soloHideWrap').classList.remove('hidden');
       document.getElementById('soloScoreRow').classList.remove('bigScore');
       document.getElementById('gameMenu').classList.add('hidden');
@@ -300,22 +295,24 @@ function doJoinMulti(r){
   alert('Room lo join ayyav: '+r+' - Max 6 Players!');
 }
 function sendChat(){ var t=document.getElementById('chatInput').value.trim(); if(!t||!multiRoom) return; db.ref('multi/'+multiRoom+'/chat').push({user:currentUser,text:t,time:Date.now()}); document.getElementById('chatInput').value=''; }
+// MULTI - Idharu Start Chesthe Chalu - Instant Start! Time Vadhu!
 function startMultiGame(){
   if(!multiRoom) return alert('Mundhu Room Join Avvu mama!');
   db.ref('multi/'+multiRoom+'/players/'+currentUser).update({ready:true, score:0});
-  showMultiMeme('⌛','Waiting...','Nuvvu READY! Friends kosam waiting...','meme-big');
-  document.getElementById('multiResult').innerText='⌛ Waiting for Friends... Min 2 Ready kavali!';
+  showMultiMeme('⌛','Waiting...','Nuvvu READY! Friend Start kosam...','meme-big');
+  document.getElementById('multiResult').innerText='⌛ Waiting... Friend kuda START kottagane Game Start!';
   document.getElementById('rematchBox').classList.add('hidden');
   document.getElementById('multiClickArea').classList.add('hidden');
   document.getElementById('multiMenu').classList.remove('hidden');
-  setTimeout(checkBothReady, 600);
+  checkBothReady(); // Delay ledhu - Apude Check!
 }
 function checkBothReady(){
   if(!multiRoom || mPlaying) return;
   db.ref('multi/'+multiRoom+'/players').once('value', s=>{
-    var readyCount=0, total=0;
-    s.forEach(c=>{ total++; if(c.val().ready) readyCount++; });
-    if(total>=2 && readyCount>=2 && readyCount===total){
+    var readyCount=0;
+    s.forEach(c=>{ if(c.val().ready) readyCount++; });
+    // IDHARU READY = START! Migilina vallu kavalsina avasaram ledhu!
+    if(readyCount>=2){
       db.ref('multi/'+multiRoom+'/game').set({status:'playing', timeLeft:10, startAt: Date.now()});
     }
   });
